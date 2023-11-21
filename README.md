@@ -7,9 +7,9 @@ http://yogico.cafe24app.com/
 고객 주문관리 에 노출되게 개발 진행 
 ![img_01](https://github.com/sijoow/order/assets/120313660/ae6ca636-f744-418c-9c1d-b14ac0fe1efb)
 c2f545-14cc-44f2-b852-710450408e93)
-
+![img_02](https://github.com/sijoow/order/assets/120313660/bda34935-c083-41c9-8212-4a23402c9a36)
 #### 비밀번호 수정을 통한 패스워드 관리 기능 추가
-
+![img_03]
 
 #### 주문서 수집 완료 후 매장 별 금일/주간/월간 판매 및 전국 매장 판매 best5 기능 추가
 #### 마스터키 경우 월간 판매 리스트 확인 가능
