@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <title>Document</title>
+<body>
+  <style>
+    .form-label{font-size:14px;}
+  </style>
+  <%- include('nav.html') %>
+<script  src="https://code.jquery.com/jquery-latest.js"></script>
+<div class="container">
+  <section class="d-flex flex-column align-items-center justify-content-center mt-4 ">
+    <div class="col-md-12 col-xl-5  mt-5 ">
+      <div class="card info-card sales-card pb-4">
+        <div class="card-body">
+          <div class="pt-4 pb-2">
+            <h5 class="card-title text-center pb-0 fs-4" style="color:#111;"><b>회원가입</b></h5>
+            <p class="text-center small">회원가입을 진행해주세요</p>
+          </div>
+          <form class="row g-3" action="/join_register" method="POST">
+            <div class="col-12">
+              <label for="vendor" class="form-label">아이디</label>
+              <input type="text" name="joinId" class="form-control" id="joinId" required>
+            </div>
+            <div class="col-12 mt-4">
+              <label for="vendor" class="form-label">비밀번호</label>
+              <input type="pw" name="joinPw" class="form-control" id="joinPw" required>
+            </div>
+            <div class="col-12 mt-4">
+              <label for="vendor" class="form-label">성함</label>
+              <input type="text" name="joinName" class="form-control" id="joinName" required>
+            </div>                          
+            <div class="col-md-12 mt-4">
+              <label for="vendor" class="form-label">근무매장</label>
+              <select class="form-control" name="joinStore" id="joinStore">
+                  <option value="" disabled selected class="default-option" >매장선택</option>
+                  <option value="롯데백화점 평촌점">롯데백화점 평촌점</option>
+                  <option value="롯데백화점 안산점">롯데백화점 안산점</option>
+                  <option value="롯데백화점 동탄점">롯데백화점 동탄점</option>
+                  <option value="롯데백화점 광복점">롯데백화점 광복점</option>
+                  <option value="롯데프리미엄아울렛 기흥점">롯데프리미엄아울렛 기흥점</option>
+                  <option value="롯데프리미엄아울렛 이천점">롯데프리미엄아울렛 이천점</option>
+                  <option value="현대백화점 미아점">현대백화점 미아점</option>
+                  <option value="신세계백화점 대구점">신세계백화점 대구점</option>
+                  <option value="신세계센텀시티몰 부산점">신세계센텀시티몰 부산점</option>
+                  <option value="아이파크몰 용산점">아이파크몰 용산점</option>
+                  <option value="아이파크몰 고척점">아이파크몰 고척점</option>
+                  <option value="스타필드 하남점">스타필드 하남점</option>
+                  <option value="스타필드 고양점">스타필드 고양점</option>
+                  <option value="스타필드 안성점">스타필드 안성점</option>
+                  <option value="갤러리아백화점 광교점">갤러리아백화점 광교점</option>
+              </select>          
+            </div>
+            <div class="col-12 mt-4" style="display:none">
+              <label for="phone" class="form-label">관리자권한</label>
+              <input type="text" name="mapClass" id="mapClass"class="form-control"  value="인증전">
+            </div> 
+
+            <div class="col-12 mt-3">
+              <button class="btn btn-primary w-100" type="submit" style="background:#00bdd4;font-weight:600;border:none;padding-top:10px;padding-bottom:10px;">가입</button>
+            </div>  
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<script>
+   $(document).on('input', '#JoinphoneNumber',function() {
+        var number = $(this).val().replace(/[^0-9]/g, '');  // 숫자만 추출
+        var phone = '';
+        if(number.length < 4) {
+            return number;
+        } else if(number.length < 7) {
+            phone += number.substr(0, 3);
+            phone += '-';
+            phone += number.substr(3);
+        } else if(number.length < 11) {
+            phone += number.substr(0, 3);
+            phone += '-';
+            phone += number.substr(3, 3);
+            phone += '-';
+            phone += number.substr(6);
+        } else {
+            phone += number.substr(0, 3);
+            phone += '-';
+            phone += number.substr(3, 4);
+            phone += '-';
+            phone += number.substr(7, 4);
+        }
+        $(this).val(phone);
+    });
+   
+
+</script>
+</body>
+</html>

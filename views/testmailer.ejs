@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Image Sender</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="contentToCapture" style="padding: 20px; margin: 20px; border: 1px solid black;width:200px;background:#fff;">
+        <h1>메일 보내기 테스트</h1>
+    </div>
+
+    <!-- 이메일 입력 필드 추가 -->
+    <label for="customerEmail">고객 이메일 주소:</label>
+    <input type="email" id="customerEmail" placeholder="이메일 주소를 입력해주세요">
+    
+    <button onclick="captureAndSend()">캡처 후 메일발송</button>
+
+    <script>
+        function captureAndSend() {
+            html2canvas(document.getElementById('contentToCapture')).then(function(canvas) {
+                const imgData = canvas.toDataURL('image/jpeg');
+                const email = document.getElementById('customerEmail').value;  // 이메일 주소 가져오기
+                $.ajax({
+                    url: '/sendMail',
+                    method: 'POST',
+                    data: { imageData: imgData, email: email },  // 이메일 주소도 함께 전송
+                    success: function(response) {
+                        alert(response);
+                    },
+                    error: function(error) {
+                        alert('이메일 보내기 실패:', error);
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>

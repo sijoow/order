@@ -1,0 +1,115 @@
+
+<%- include('../header.html') %>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script> 
+<style>
+/*오프라인 매장 판매리스트*/
+
+body{background:#f6f9ff;}
+#example_filter{float:right;padding-bottom:20px;margin-top:20px;}
+.dataTables_length{float:left!important;}
+
+#example{font-size:14px;font-family:'Noto Sans KR';}
+#example tr:hover{background:#ededed;cursor:default;}
+#example td{border-bottom: 1px solid #ddd;}
+#example a{color:#00bdd4;}
+
+#example_wrapper{}
+.dataTables_paginate{margin-top:20px;}
+.dataTables_wrapper .dataTables_filter input{border:1px solid #ddd;font-size:12px;padding:5px;width:200px;}
+.dataTables_filter label {font-size: 0}
+.dataTables_wrapper{width:100%;}
+.dataTables_paginate{display:inline-block;width:100%;}
+.dataTables_wrapper .dataTables_paginate {text-align: center;}
+.dataTables_wrapper .dataTables_paginate{}
+.dataTables_length{}
+.dataTables_wrapper .dataTables_paginate .paginate_button{background:#fff;padding:0!important;padding-left:5px;padding-right:5px;}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{
+background:none!important;padding:0!important;border:none!important;border-bottom:2px solid #111!important;font-weight:bold;}
+
+.nav-item span{font-weight:600;}
+</style>
+
+<main id="main" class="main">
+    <div class="container-box">   
+        <section class="section dashboard col-md-12 mt-5 off-wrapper-store pb-4 pd off-store" style="background:#fff;" >
+            <div class="pagetitle pt-1 mt-5">
+                <h1 style="font-weight:600;font-size:30px;text-align:center;padding-top:20px;"><%=user.근무매장 %> 판매리스트 <span></span></h1>
+            </div>
+            <div class="store-list" style="background:#fff;min-width:750px;">
+                <table id="example">
+                    <thead>
+                        <tr>
+                            <th>날짜</th>
+                            <th>판매처</th>
+                            <th>판매자</th>
+                            <th>고객명</th>
+                            <th>상품</th>
+                            <th>수량</th>
+                            <th>할인률</th>
+                            <th>판매가</th>
+                            <th>고객용 주문서확인</th>
+                            <th>판매처 주문서확인</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+						<% for (var i = 0; i < posts.length; i++){ %>
+							<% var j = 1; %>
+							<% while(posts[i]['상품명' + j]) { %>
+								<tr>
+									<td><%= posts[i].날짜 %></td>
+									<td><%= posts[i].판매처 %></td>
+									<td><%= posts[i].판매자 %></td>
+									<td><%= posts[i].수취인 %></td>                           
+									<td><%= posts[i]['비즈' + j] %></td>
+									<td><%= posts[i]['수량' + j] %></td>
+									<td><%= posts[i]['할인' + j] %></td>
+									<td><%= posts[i]['단가' + j] %></td>
+									<!-- posts와 orders 간의 관계를 명확히 해야 합니다. -->
+									<td><a href="/customer/<%= posts[i]._id %>">고객용 주문서확인</a></td>
+									<td><a href="/master/<%= posts[i]._id %>">판매처 주문서확인</a></td>
+								</tr>
+								<% j++; %>
+							<% } %>  
+						<% } %>    
+                    </tbody>                                                                                                            
+                </table>
+            </div>
+        </section>       
+    </div>
+</main>      
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable({
+            order: [[0, 'desc']],
+            columnDefs: [{
+                targets: 0,
+                orderable: false
+            }],
+            language: {
+                "sEmptyTable":     "테이블에 데이터가 없습니다",
+                "sInfo":           "",
+                "sInfoEmpty":      "0건",
+                "sInfoFiltered":   "(전체 _MAX_ 건 중 검색결과)",
+                "sInfoPostFix":    "",
+                "sInfoThousands":  ",",
+                "sLengthMenu":     "_MENU_",
+                "sLoadingRecords": "로딩중...",
+                "sProcessing":     "처리중...",
+                "sSearch":         "검색:",
+                "sZeroRecords":    "검색 결과가 없습니다",
+                "oPaginate": {
+                    "sFirst":    "처음",
+                    "sLast":     "마지막",
+                    "sNext":     "다음",
+                    "sPrevious": "이전"
+                }
+            }
+        });
+        $('.dataTables_filter input').attr('placeholder', '검색어 입력 해주세요');
+    });
+</script>
+ <%- include('../footer.html') %>

@@ -1,0 +1,137 @@
+
+
+<%- include('../header.html') %>
+<style>
+    .member_section tr{width:100%;}
+    .member_section td{float:left;}
+    .member_section td:nth-child(1){width:80%;text-align:center;}
+    .member_section td:nth-child(2){width:18%;float:left;}
+
+    .member_section{width:100%;}
+    .member_section td:nth-child(1){width:10%;}
+    .member_section td:nth-child(2){width:90%;}
+    .suport_delete_button{margin-top:10px;background:none;width:130px;height:30px;border-radius:4px;background:#00bdd4;color:#fff;border:none;margin-top:20px;;float:right;}
+    .member_add_button{width:100px;height:30px;border-radius:4px;background:#00bdd4;color:#fff;border:none;}
+    .member_section tr{border-bottom:1px solid #ddd;}
+    .member_section td{margin-top:10px;padding-bottom:5px;}
+    .member_section input{cursor:pointer;}
+   </style>
+<script  src="https://code.jquery.com/jquery-latest.js"></script>
+<!-- 서포터즈 추가 폼 -->
+<form action="/member_add" method="POST" onsubmit="return confirm('맴버를 추가하시겠습니까?')">
+    <section class="d-flex flex-column align-items-center justify-content-center mt-4">
+        <div class="col-md-12 col-xl-3 mt-5">
+            <div class="card info-card sales-card pb-4">
+                <div class="card-body">
+                    <div class="pt-4 pb-2">
+                        <h5 class="card-title text-center pb-0 fs-4" style="color:#111;"><b>[<%= user.근무매장 %>]판매 직원 등록</b></h5>
+                    </div>
+                    <div style="width:90%;margin:0 auto;margin-top:10px;">
+                        <input type="text" class="member_name" name="member_name" placeholder="성함 및 직책을 입력해주세요">
+                        <input type="text" class="member_store" name="member_store" value="<%= user.권한 %>" style="display:none;">
+                        <button type="submit" class="member_add_button">추가생성</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+
+<style>
+    .displayNone{display:none}
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+            const memberSections = document.querySelectorAll('.member_section');
+            memberSections.forEach(function (section) {
+                section.classList.remove('displayNone'); // displayNone 클래스 제거
+            });
+        }, 10); // 1초 뒤에 실행
+
+        const user근무매장 = "<%= user.근무매장 %>"; // 사용자의 근무매장 값
+        const memberSections = document.querySelectorAll('.member_section tr');
+
+        // 각 행을 반복하면서 클래스 비교 및 표시 설정
+        memberSections.forEach(function (row) {
+            const 권한 = row.getAttribute('class'); // 행의 클래스 값을 가져옵니다.
+            const 끝3글자_근무매장 = user근무매장.slice(-3);
+            const 끝3글자_권한 = 권한.slice(-3);
+
+            // 끝 3글자 비교
+            if (user근무매장 === "관리자") {
+                row.style.display = 'table-row'; // 사용자가 "관리자"인 경우 모든 행 표시
+            } else if (끝3글자_근무매장 === 끝3글자_권한) {
+                row.style.display = 'table-row'; // 클래스가 일치하는 경우 표시
+            } else {
+                row.style.display = 'none'; // 클래스가 일치하지 않는 경우 숨김
+            }
+        });
+    });
+</script>
+<!-- 서포터즈 삭제 폼 -->
+<form action="/member_delete" method="POST" >
+    
+    <section class="d-flex flex-column align-items-center justify-content-center">
+        <div class="col-md-12 col-xl-3 mt-1">
+            <div class="card info-card sales-card pb-4">
+                <div class="card-body">
+                    <div class="pt-4 pb-2">
+                        <h5 class="card-title text-center pb-0 fs-4" style="color:#111;"><b>[<%= user.근무매장 %>]  직원관리</b></h5>
+                    </div>
+                    <table class="member_section displayNone">
+                        <% for (var i = 0; i < memberPosts.length; i++){ %>
+                        <tr class="<%= memberPosts[i].권한 %>">
+                            <td>
+                                <input type="checkbox" name="member_name" value="<%= memberPosts[i].맴버 %>">
+                            </td>
+                            <td>
+                                <%= memberPosts[i].맴버 %>
+                            </td>
+                        </tr>
+                        <% } %>
+
+                    </table>
+                    <button type="submit" class="suport_delete_button" id="deleteButton">선택 직원 삭제</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+     const addButton = document.querySelector('form[action="/member_add"] button[type="submit"]');
+     const nameInput = document.querySelector('form[action="/member_add"] input[name="member_name"]');
+     
+     addButton.addEventListener("click", function (e) {
+         if (nameInput.value.trim() === "") {
+             e.preventDefault();
+             alert("성함및 직책을 입력해주세요");
+         }
+     });
+
+     function deleteConfirmation() {
+         const selectedMembers = document.querySelectorAll('input[name="member_name"]:checked');
+         if (selectedMembers.length === 0) {
+             alert("삭제할 멤버를 선택하세요.");
+             return false;
+         } else {
+             const selectedMemberNames = Array.from(selectedMembers).map(checkbox => checkbox.value);
+             return confirm("다음 멤버를 삭제하시겠습니까?\n" + selectedMemberNames.join("\n"));
+         }
+     }
+
+     const deleteButton = document.getElementById("deleteButton");
+     deleteButton.addEventListener("click", function (e) {
+         if (!deleteConfirmation()) {
+             e.preventDefault();
+         }
+     });
+ });
+</script>
+
+  <br/><br/><br/><br/><br/><br/><br/>
+  <%- include('../footer.html') %>

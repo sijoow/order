@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>주문서 양식</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 부트스트랩 CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!--주소검색-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script src="//d1p7wdleee1q2z.cloudfront.net/post/search.min.js"></script>   
+    <!--웹폰트-->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+/*기본글자 크기 16px에 font-weight:400 으로 작업  총합계 강조크기 25px 600  최소글자 font-size:15px*/
+
+/*제품명 부분 코드 변경작업*/
+    *{margin:0;padding:0;}
+    input[type=checkbox], input[type=radio]{cursor:pointer;}
+    .form-control{vertical-align:middle;}
+    ul{margin:0;padding:0;}
+    ul li{list-style:none;}
+    .container{background:#fff;}
+    body {
+        background-color: white;
+        font-family:'Noto Sans KR',sans-serif;margin:0;padding:0;
+        font-weight:400;line-height:1.7;
+    }
+
+    .container{max-width:1000px;border:1px solid #ced4da;padding:40px;}
+    /*주문서 작성페이지 CSS*/
+    .order-title{text-align:center;font-size:30px;font-weight:600;padding-bottom:50px;}
+
+    /*제품 색상 부분 CSS*/
+    .table thead th{margin:0;padding:0;text-align:center;padding-top:10px;padding-bottom:10px;border:none;}
+    .table thead tr{border-top:1px solid #ced4da;border-bottom:1px solid #ced4da;}
+    .table thead td{border:none;}
+    .table td, .table th{}
+    .table td, .table th{padding:0;margin:0;padding:5px;border:none;}
+    .table-responsive-md{width:100%;border-collapse: collapse;}
+    label{font-size:16px;}
+    select{margin:0;padding:0!important;font-size:16px!important;}
+
+    .remove_addGoods{line-height:35px;font-weight:600;cursor:pointer;}
+
+    /*상품추가 버튼*/
+    .btn-outline-info{border:1px solid #00bdd4!important;color:#00bdd4}
+    .btn-outline-info:hover{background:#00bdd4!important;}
+    /*총 합계*/
+    .totalPriceContainer strong{font-size:20px;}
+    #totalPrice{font-size:25px;font-weight:600}
+    /*필수체크사항*/
+    .star{font-size:16px;font-weight:600;color:#00bdd4}
+    .deliver-table{width:100%;}
+    .deliver-table thead th{text-align:center;border:1px solid #111; padding: 15px 0px 15px 0px;font-size:16px;font-weight:600;}
+    .deliver-table thead th:nth-child(1){border-left:none;}
+    .deliver-table thead th:nth-child(3){border-right:none;}
+    .deliver-table tbody td {text-align:center;border:1px solid #111;    padding: 10px 25px 10px 25px;font-size:15px;}
+    .deliver-table tbody td:nth-child(1){border-left:none;}
+    .deliver-table tbody td:nth-child(3){border-right:none;}
+    .deliver-table .form-control{text-align:center;}
+    .deliver-table thead td{}
+
+    .deliver-table th:nth-child(1){width:60%;}
+    .deliver-table th:nth-child(2){width:20%;}
+    .deliver-table th:nth-child(3){width:20%;}
+
+    .offcanvas-body{font-size:15px;}
+    #signatureCanvas{border:1px solid #dee2e6;}
+    .infor_txt{border-top:1px solid #111;border-bottom:1px solid #111;padding-top:30px;padding-bottom:30px;}
+    .infor_txt ul{width:100%;margin:0 auto;}
+    .infor_txt ul li{text-align:center;}
+    .infor_txt ul li:nth-child(2){font-size:12px;}
+    .infor_txt ul li:nth-child(3){margin-top:10px;}
+    .infor_txt ul li:nth-child(4){font-weight:600;}
+    .purchase_confirm {
+    margin-top:5px;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    }
+    .purchase_confirm .new_title,
+    .purchase_confirm .new_data,
+    .purchase_confirm .signature {text-align: center;  }
+    
+    /*총합계*/
+    .totalPriceContainer{text-align:right;}
+    /*개인정보동의*/
+    .individal ul li{margin-left:10px;}
+    .period_info{text-align:center;margin-top:20px;}
+    .period_info input{margin-left:20px;vertical-align: middle;margin-top:-3px;}
+    .individal dt{font-weight:600;}
+    .individal dd{margin-top:10px;font-size:15px;}
+    .period_info{font-weight:600;font-size:16px;}
+    .period_info label{font-weight:600;}
+    .entry_info{padding-top:10px;padding-bottom:10px;font-weight:600;font-size:20px;}
+
+    footer{border-top:1px solid #111;padding-top:30px;}
+    footer ul li{text-align:center;font-size:14px;width:100%;}
+
+    .form-control:disabled, .form-control[readonly]{background:#f8f8f8}
+
+    </style>
+
+</head>
+<body>
+
+<%- include('../nav2.html') %>
+<!--#contentToCapture-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.js"></script>
+<script>
+    function captureScreen() {
+        window.scrollTo(0, 0);
+        setTimeout(function() {
+            const content = document.getElementById('contentToCapture');
+            html2canvas(content).then(function(canvas) {
+                const link = document.createElement("a");
+                link.href = canvas.toDataURL("image/jpeg");
+                link.download = "captured_image.jpg";
+                link.click();
+            });
+        }, 100);  
+    }
+</script>
+
+<div class="container mt-5"  id="contentToCapture">
+    
+    <div class="form-row order_title" >
+        <div class="form-group col-md-12 order-title">
+            고객용 주문서확인
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="receiver">수취인(Receiver)</label>
+            <input type="text" class="form-control"value="<%= order.수취인 %>" readonly>
+
+        </div>
+        <div class="form-group col-md-6">
+            <label for="tel">연락처(Tel)</label>
+            <input type="text" class="form-control"value="<%= order.연락처 %>" readonly>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="email">이메일(E-mail)</label>
+            <input type="email" id="customerEmail" class="form-control"value="<%= order.이메일 %>" readonly>
+        </div>
+        <div class="form-group col-md-12 mt-4">
+            <label for="address">배송지(Address)</label>
+            <input type="text" class="form-control"value="[우편번호] <%= order.배송지1 %> "readonly>
+            <input type="text" class="form-control mt-1"value="<%= order.배송지2 %>" readonly>
+            <input type="text" class="form-control mt-1"value="<%= order.배송지3 %>" readonly>
+        </div>
+    </div>
+
+    <style>
+         .product-info{width:100%;}
+         .product-info th{text-align:left;}
+         .product-info th span{margin-left:10px;}
+         .product-info td span{margin-left:10px;}
+
+         .product-info th{border-top:1px solid #dee2e6;border-bottom:1px solid #dee2e6;padding-top:10px;padding-bottom:10px;background:#f8f8f8;font-weight:400;}
+         .product-info td{border-bottom:1px solid #dee2e6;padding-top:10px;padding-bottom:10px;}
+
+         .product-info tbody tr{padding-top:10px;padding-bottom:10px;}
+        .product-info th:nth-child(1), td:nth-child(1) {
+            width:50%;
+        }
+        .product-info th:nth-child(2), td:nth-child(2) {
+           text-align:center;
+        }
+        .product-info th:nth-child(3), td:nth-child(3) {
+            text-align:center;
+        }
+        .product-info th:nth-child(4), td:nth-child(4) {
+            text-align:center;
+        }       
+        .product-name{font-size:18px;font-weight:600;}
+        .totla_price{float:right;text-align:right;font-size:20px;font-weight:600;}
+        .totla_price span{margin-left:30px;font-size:25px;}     
+    </style>
+    <div class="form-row">
+        <div class="form-group col-md-12 mt-5">
+            <label for="product" class="product-name pb-2">상품(product)</label>
+            <table class="product-info">
+                <thead>
+                    <tr>
+                        <th><span>상품</span></th>
+                        <th><span>수량</span></th>
+                        <th><span>배송</span></th>               
+                        <th><span>단가</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (var i = 1; i <= Object.keys(order).length; i++) { %>
+                    <tr>
+                        <td class="goodspluscolor"> <span><%= order['비즈' + i] %>  <%= order['상품컬러' + i] %></span></td>
+                        <td> <%= order['수량' + i] %></td>
+                        <td> <%= order['배송비' + i] %></td>               
+                        <td> <%= order['단가' + i] %></td>
+                    </tr>
+                    <% } %> 
+                </tbody>              
+            </table>
+        </div>
+        <div class="form-row mt-4 col-md-12">
+            <div class="form-group col-md-12 totla_price">
+                총합계 <span><%= order.총합계 %></span> 원
+            </div>
+        </div>       
+    </div>
+
+    <div class="form-row mt-4">
+        <div class="form-group col-md-12 mt-4" >
+            <table class="deliver-table">
+                <thead>
+                    <tr>
+                        <th>제품명<br/><span>Product Name</span></th>
+                        <th>기본운임(편도)<br/><span>cargo rate</span></th>
+                        <th>도서산간/제주<br/><span>exceptional region</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>더블</td>
+                        <td>80,000원</td>
+                        <td>160,000원</td>                           
+                    </tr>
+                    <tr>
+                        <td>맥스</td>
+                        <td>40,000원</td>
+                        <td>80,000원</td>                           
+                    </tr>       
+                    <tr>
+                        <td>미디,팟,슬림,프라임,허기보</td>
+                        <td>30,000원</td>
+                        <td>60,000원</td>                           
+                    </tr>           
+                    <tr>
+                        <td>드롭,롤맥스,라운저,피라미드,미니,허거,버블</td>
+                        <td>20,000원</td>
+                        <td>40,000원</td>                           
+                    </tr>    
+                    <tr>
+                        <td>그랑데,오토만,도기보미디,요기보큐브,서포트,카터필러 롤 맥스</td>
+                        <td>15,000원</td>
+                        <td>30,000원</td>                           
+                    </tr>
+                    <tr>
+                        <td>러그</td>
+                        <td>7,000원</td>
+                        <td>14,000원</td>                           
+                    </tr>  
+
+                    <tr>
+                        <td>
+                            도비고 미니,모듀롤닷,디즈니서포트,모듀 스퀘어필로우,라운드필로우,슬리피보,롤 메이트,요가보,롤 미니,요기박스 큐브,
+                            롤 미디,월 아트,롤 스마일, 카터필러 롤미디, 리필 비즈,코지보 메가 메이트,메가문 필로우,트레이보,트레이보X,메이트 시트,하트 필로우,메이트 필로우
+                        </td>
+                        <td>5,000원</td>
+                        <td>10,000원</td>                           
+                    </tr>   
+
+                    <tr>
+                        <td>
+                            냅,냅 메이트,냅X 리스트위즈,미니 하트 필로우,바디 허그, 롤 닷,백 마이스터, 메이트,보 도우, 문 필로우, 사이너스 마이너스,
+                            볼 맥스,볼 미니, 숄더 윈더,캔버스 쿠션 스퀘어, 샤이니보, 코지보 라이트, 스퀴지보,코지보트래블,슬리퍼류,타블로,타블로X,지퍼롤,캔버스 쿠션 미니,패브릭 물감,
+                            커버,헤드피스쿨
+                        </td>
+                        <td>3,000원</td>
+                        <td>6,000원</td>                           
+                    </tr>                                                                                                                                                  
+                </tbody>                    
+            </table>
+        </div> 
+        <div class="form-group col-md-12 mt-2" >
+            <div class="offcanvas-body">
+                -제작 상품의 경우 출고 1일 전 취소가 가능합니다.<br/>
+                -제품 수령 후 포장 박스에 있는 개봉 전 주의사항을 꼭 확인하세요<br/>
+                -고객 변심 또는 만족도 불만에 따른 교환/반품 시 왕복 배송비는 고객 부담입니다<br/>
+                -단, 유의사항 등 사용자 부주의로 인한 하자는 별도의 비용이 발생할 수 있습니다<br/>
+                -사용 전 제품과 함께 동봉 된 카탈로그에 있는 취급 주의사항을 꼭 읽어 보시기 바랍니다<br/>
+                -빈백소파와 바디필로우의 경우 주문제작 제품으로 업무제작일 기준 1~5일 정도 송요됩니다&nbsp;&nbsp;[일부상품제외]<br/>
+                -제품에 따라 배송비가 다르며, 제품별 배송비는 우측 표를 참고하시길 바랍니다<br/>
+                -제품 부피에 따라 화물택배로 배송되며,일반택배와 다르게 배송 기간이 길어질 수 있는 점 양해 부탁드립니다<br/>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-row">
+        <div class="form-group col-md-12 mt-4 infor_txt" >
+            <ul>
+                <li>위 기입한 구매 제품의 정보(제품명,색상,수량 등) 및 제품 관련 안내사항을 모두 확인하였습니다</li>
+                <li>I here by confirm for the details of purchase confirmation(item,Name,Color and notice of products)</li>
+                <li class="purchase_confirm">
+                    <div class="new_title"><span>구매일자 : </span></div>&nbsp;
+
+                    <div class="new_data"></div>
+
+                    <div class="signature"> &nbsp;&nbsp;성명 : <%= order.사인 %></div>
+                </li> 
+                <li style="margin-top:10px;">(주)요기코퍼레이션 대표이사</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-12 mt-4 " >
+            <div class="individal">
+                <dl>
+                    <dt>개인정보 수집 이용 동의(필수)</dt>
+                    <dd>
+                        <ul>
+                            <li>개인정보의 수집 이용목적</li>
+                            <li>고객이 수취를 원하는 장소로 제품을 배송하는 서비스 (택배)</li>
+                            <li>제품의 사후 관리 및 A/S 동의 서비스 제공 수집하려는 개인 정보의 항목 고객명,연락처,고객주소,수취인명,E-mail주소</li>
+                        </ul>
+                    </dd>
+                    <dt>개인정보의 보유 및 이용기간</dt>
+                    <dd>
+                        <ul>
+                            <li>
+                                보유기간:개인 정보 수집 및 이용 목적이 달성되거나 고객이 파기를 요청하는 경우 지체 없이 파기
+                                단 관련 법규에 따라 보관 의무가 있는 경우에는 해당 기간 보관 후 파기
+                                수집 거부:필수 항목인 개인 정보 수집 이용에 대해 동의를 거부하실 수 있으나, 
+                                서비스 제공에 필수적으로 제공되어야 하는 정보이므로 동의를 거부하실 경우 배송 서비스 불가
+                            </li>
+                            <div class="period_info">개인정보 수집 이용에 동의하십니까?  <input type="checkbox" checked="checked" disabled="disabled" name="individal_3_ck"> <label>동의함</label></div>
+                        </ul>
+                    </dd>                        
+                </dl>
+                <dl>
+                    <dt>개인 정보 제3자 제공에 대한 별도 동의(필수)</dt>
+                    <dd>
+                        <ul>
+                            <li>개인 정보를 제공받는 자 : (주)경동물류,롯데글로벌로지스(롯데택배)</li>
+                            <li>개인 정보를 제공받는 자의 개인정보 이용 목적: 고객이 구매한 재화를 목적지까지 배송</li>
+                            <li>제공하는 개인 정보의 항목: 배송에 필요한 수취인정보(이름/주소/유무선 전화번호)</li>
+                            <li>개인 정보를 제공받는 자의 개인 정보 보유 및 이용 기간:제휴 후 1년 동의를 거부할 수 있으며, 동의 거부 시 배송/설치 서비스가 제공되지 않습니다</li>
+                            <div class="period_info">위 개인정보 제 3자 제공에 대해 동의하십니까?  <input type="checkbox" checked="checked" disabled="disabled" name="individal_3_ck"> <label>동의함</label></div>
+                        </ul>
+                    </dd>
+                </dl>   
+            </div>
+        </div>
+    </div>
+    <footer class="mt-4">
+        <ul>
+            <li>입금계좌(Bank Account):하나은행 347-910016-10604, (주)요기코퍼레이션(Yogi Corporation Inc.)</li>
+            <li>www.yogibo.kr</li>
+        </ul>
+    </footer>
+</div>
+<div class="container mt-4" style="border:none;padding:0;padding-top:15px;">
+    <div class="form-row" style="width:90%;margin:0 auto;">
+        <div class="form-group col-md-6">
+            <button id="postcodify_search_button" class="btn  btn-outline-info col-md-12 entry_info "onclick="captureScreen()"  type="button">주문서 파일 다운로드</button>
+        </div>
+        <div class="form-group col-md-6">
+            <button id="postcodify_search_button" class="btn  btn-outline-info col-md-12 entry_info " onclick="captureAndSend()"type="button">이메일로 보내기</button>
+        </div>
+    </div>
+</div>
+
+<!-- 부트스트랩 JS 및 Popper.js -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<br/><br/><br/>
+<style>
+    /*반응형*/
+    /*태블릭*/
+
+    @media only screen and (min-width: 375px) and (max-width:800px) {
+        body{font-size:14px;}
+        .container  { border:none; padding:20px;}
+        #middle_table{overflow-x:scroll;}
+        .totalPriceContainer{font-size:18px;}
+        /*테이블*/
+        .deliver-table{width:100%;}
+        .deliver-table thead th{padding: 5px 0px 5px 0px;font-size:14px;}
+        .deliver-table tbody td {padding: 10px 5px 10px 5px;font-size:14px;}
+        .deliver-table{font-size:14px}
+        .deliver-table th:nth-child(1){width:50%}
+        .deliver-table th:nth-child(2){width:25%}
+        .deliver-table th:nth-child(3){width:25%}
+        .offcanvas-body{font-size:14px;}
+        .individal dd{font-size:13px;}
+        .period_info{font-size:14px;}
+        .period_info label{font-size:14px;}
+        dl{margin-bottom:2rem}
+        footer ul{width:68%;margin:0 auto;}
+         /**/
+         .counter_number{height:33px;}
+         .counter_number li{float:left;}
+        .counter_number li:nth-child(1){width:20%;height:31px;font-size:20px;line-height:31px;font-weight:800;}
+        .counter_number li:nth-child(2){width:60%;}
+        .counter_number li input{float:left;width:100%;text-align:center;height:31px;border:none;}
+        .counter_number li:nth-child(3){width:20%;font-size:17px;height:31px;line-height:31px;font-weight:600;}
+
+    }
+
+    @media only screen and (min-width:250px) and (max-width:400px) {
+        body{font-size:13px;}
+        .container  {
+            border:none;
+            padding:10px;
+        }
+        table input{font-size:13px!important;}
+        select{font-size:13px!important;}
+        select option{font-size:13px!important;}
+        .deliver-table thead th{padding: 5px 0px 5px 0px;font-size:13px;}
+        .deliver-table tbody td {padding: 10px 5px 10px 5px;font-size:13px;}
+        .deliver-table{font-size:14px}
+        .deliver-table th:nth-child(1){width:50%}
+        .deliver-table th:nth-child(2){width:25%}
+        .deliver-table th:nth-child(3){width:25%}
+        .offcanvas-body{font-size:12px;}
+        .individal dd{font-size:12px;}
+        .individal ul li{margin:0;}
+        .period_info{font-size:13px;}
+        .period_info label{font-size:13px;margin-left:5px;}
+        dl{margin-bottom:2rem}
+        footer ul{width:93%;margin:0 auto;}
+        .infor_txt ul li:nth-child(2){font-size:10px;}
+        .order-title{font-size:20px;padding-bottom:10px!important;}
+        .entry_info{font-size:20px;}
+        input[type=checkbox], input[type=radio] {
+                box-sizing: border-box;
+                padding: 0;
+                width: 18px;
+                height: 18px;
+                margin-top: 6px;
+                vertical-align: text-bottom;
+            }
+    }
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth() + 1;
+        const date = now.getDate();
+        const formattedDate = `${year}년 ${month}월 ${date}일`;
+        const elements = document.querySelectorAll('.new_data');
+        elements.forEach(element => {
+            element.textContent = formattedDate;
+        });
+    });
+
+
+    $(document).ready(function() {
+        $('.product-info tr').each(function() {
+            if ($(this).text().trim() === '') { // 텍스트가 없거나 공백만 있을 경우
+                $(this).css('display', 'none'); 
+            }
+        });
+        //색상선택부분일시 숨김처리 하는 코드 
+        $('.goodspluscolor span').each(function() {
+            var currentText = $(this).text();
+            if (currentText.includes('색상선택')) {
+                $(this).text(currentText.replace('색상선택', ''));
+            }
+        });
+    });
+</script>
+
+<script>
+    function captureAndSend() {
+    window.scrollTo(0, 0);  // 페이지의 최상단으로 스크롤
+
+    setTimeout(function() {  // 약간의 딜레이 후에 실행
+        html2canvas(document.getElementById('contentToCapture')).then(function(canvas) {
+            const imgData = canvas.toDataURL('image/jpeg');
+            const email = document.getElementById('customerEmail').value;  // 이메일 주소 가져오기
+            $.ajax({
+                url: '/sendMail',
+                method: 'POST',
+                data: { imageData: imgData, email: email },
+                success: function(response) {
+                    alert(response);
+                },
+                error: function(error) {
+                    alert('이메일 보내기 실패:', error);
+                }
+            });
+        });
+    }, 100);
+}
+</script>
+
+
+</body>
+</html>

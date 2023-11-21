@@ -1,0 +1,2259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>주문서 양식</title>
+    <script  src="https://code.jquery.com/jquery-latest.js"></script>
+    <!-- 부트스트랩 CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.css" rel="stylesheet">
+    <!--주소검색-->
+    <script src="https://d1p7wdleee1q2z.cloudfront.net/post/search.js"></script>   
+    <!--웹폰트-->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+
+</head>
+  
+<style>
+    /*기본글자 크기 16px에 font-weight:400 으로 작업  총합계 강조크기 25px 600  최소글자 font-size:15px*/
+    
+    /*제품명 부분 코드 변경작업*/
+    
+        *{margin:0;padding:0;}
+        input[type=checkbox], input[type=radio]{cursor:pointer;}
+        .form-control{vertical-align:middle;}
+        ul{margin:0;padding:0;}
+        ul li{list-style:none;}
+        .container{background:#fff;}
+        body {
+            background-color: white;
+            font-family:'Noto Sans KR',sans-serif;margin:0;padding:0;
+            font-weight:400;line-height:1.7;
+        }
+    
+        .container{max-width:1000px;border:1px solid #ced4da;padding:40px;}
+        /*주문서 작성페이지 CSS*/
+        .order-title{text-align:center;font-size:30px;font-weight:600;padding-bottom:50px;}
+    
+        /*제품 색상 부분 CSS*/
+        .table thead th{margin:0;padding:0;text-align:center;padding-top:10px;padding-bottom:10px;border:none;}
+        .table thead tr{border-top:1px solid #ced4da;border-bottom:1px solid #ced4da;}
+        .table thead td{border:none;}
+  
+        .table td, .table th{padding:0;margin:0;padding:5px;border:none;}
+        .table-responsive-md{width:100%;border-collapse: collapse;}
+        label{font-size:16px;}
+        select{margin:0;padding:0!important;font-size:16px!important;}
+    
+        .table-responsive-md .form-control{text-align:center;}
+        .table-responsive-md th:nth-child(1), td:nth-child(1) {
+            width:155px;
+        }
+        .table-responsive-md th:nth-child(2), td:nth-child(2) {
+            width:155px;
+        }
+        .table-responsive-md th:nth-child(3), td:nth-child(3) {
+            width:155px;
+        }
+        .table-responsive-md th:nth-child(4), td:nth-child(4) {
+            width:155px;
+        }
+        .table-responsive-md th:nth-child(5), td:nth-child(5) {
+            width:155px;
+        }
+        .table-responsive-md th:nth-child(6), td:nth-child(6) {
+            width:90px;
+        }                               
+        .table-responsive-md th:nth-child(7), td:nth-child(7) {
+            width: 25%; 
+        }  
+        .remove_addGoods{line-height:35px;font-weight:600;cursor:pointer;}
+    
+        /*상품추가 버튼*/
+        .btn-outline-info{border:1px solid #00bdd4!important;color:#00bdd4}
+        .btn-outline-info:hover{background:#00bdd4!important;}
+        /*총 합계*/
+        .totalPriceContainer strong{font-size:20px;}
+        #totalPrice{font-size:25px;font-weight:600}
+        /*필수체크사항*/
+        .star{font-size:16px;font-weight:600;color:#00bdd4}
+        .deliver-table{width:100%;}
+        .deliver-table thead th{text-align:center;border:1px solid #111; padding: 15px 0px 15px 0px;font-size:16px;font-weight:600;}
+        .deliver-table thead th:nth-child(1){border-left:none;}
+        .deliver-table thead th:nth-child(3){border-right:none;}
+        .deliver-table tbody td {text-align:center;border:1px solid #111;    padding: 10px 25px 10px 25px;font-size:15px;}
+        .deliver-table tbody td:nth-child(1){border-left:none;}
+        .deliver-table tbody td:nth-child(3){border-right:none;}
+        .deliver-table .for-control{text-align:center;}
+
+    
+        .deliver-table th:nth-child(1){width:60%;}
+        .deliver-table th:nth-child(2){width:20%;}
+        .deliver-table th:nth-child(3){width:20%;}
+    
+        .offcanvas-body{font-size:15px;}
+        #signatureCanvas{border:1px solid #dee2e6;}
+        .infor_txt{border-top:1px solid #111;border-bottom:1px solid #111;padding-top:30px;padding-bottom:30px;}
+        .infor_txt ul{width:100%;margin:0 auto;}
+        .infor_txt ul li{text-align:center;}
+        .infor_txt ul li:nth-child(2){font-size:12px;}
+        .infor_txt ul li:nth-child(3){margin-top:10px;}
+        .infor_txt ul li:nth-child(4){font-weight:600;}
+        .purchase_confirm {
+        margin-top:5px;
+        display: flex; 
+        justify-content: center; 
+        align-items: center;
+        }
+        .purchase_confirm .new_title,
+        .purchase_confirm .new_data,
+        .purchase_confirm .signature {text-align: center;  }
+        /*총합계*/
+        .totalPriceContainer{text-align:right;}
+        /*개인정보동의*/
+        .individal ul li{margin-left:10px;}
+        .period_info{text-align:center;margin-top:20px;}
+        .period_info input{margin-left:20px;vertical-align: middle;}
+        .individal dt{font-weight:600;}
+        .individal dd{margin-top:10px;font-size:15px;}
+        .period_info{font-weight:600;font-size:16px;}
+        .period_info label{font-weight:600;}
+        .entry_info{padding-top:10px;padding-bottom:10px;font-weight:600;font-size:20px;}
+        footer{border-top:1px solid #111;padding-top:30px;}
+        footer ul li{text-align:center;font-size:14px;width:100%;}
+
+        /*pc 형식에서 의 제품 선택 부분*/
+        .color_select_bar option{text-align:left;}
+        .table-responsive-md option{text-align:left;}
+        .default-option { text-align: center!important;direction: rtl;}
+</style>
+
+    
+<body>
+
+<%- include('../nav2.html') %>
+<div class="container mt-5"  >
+    <div class="form-row order_title" >
+        <div class="form-group col-md-12 order-title">
+            주문서 작성 페이지
+        </div>
+    </div>
+    <style>
+        .remove{display:none!important}
+    </style>
+    
+    <form action="/order" method="POST" id="form1" style="margin:0 auto;">
+        <div class="form-row"><div class=" col-md-12" style="text-align:right;font-size:14px"><span class="star">* </span><em style="border-bottom:1px solid #ddd;font-style:normal">필수체크사항</em></div></div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="vendor">판매처(Store)</label>
+                <select class="form-control" name="store" id="store">
+                    <option>전체</option>
+                    <option value="롯데백화점 안산점">1.롯데백화점 안산점</option>
+                    <option value="롯데백화점 동탄점">2.롯데백화점 동탄점</option>
+                    <option value="롯데백화점 광복점">3.롯데백화점 광복점</option>
+                    <option value="롯데프리미엄아울렛 기흥점">4.롯데프리미엄아울렛 기흥점</option>
+                    <option value="롯데프리미엄아울렛 이천점">5.롯데프리미엄아울렛 이천점</option>
+                    <option value="현대백화점 미아점">6.현대백화점 미아점</option>
+                    <option value="신세계백화점 대구점">7.신세계백화점 대구점</option>
+                    <option value="신세계센텀시티몰 부산점">8.신세계센텀시티몰 부산점</option>
+                    <option value="아이파크몰 용산점">9.아이파크몰 용산점</option>
+                    <option value="아이파크몰 고척점">10.아이파크몰 고척점</option>
+                    <option value="스타필드 하남점">11.스타필드 하남점</option>
+                    <option value="스타필드 고양점">12.스타필드 고양점</option>
+                    <option value="갤러리아백화점 광교점">13.갤러리아백화점 광교점</option>
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="vendor">판매자(Staff)</label>
+                <select class="form-control" name="staff" id="staff">
+                    <option value="전체">전체</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="vendor"><span class="star">*</span>수취인(Receiver)</label>
+                <input class="form-control"  name="receiver" id="receiver" > 
+            </div>
+            <div class="form-group col-md-6">
+                <label for="phone"><span class="star">*</span>연락처(Tel)</label>
+                <input type="text" class="form-control"  name="phoneNumber" id="phoneNumber">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="vendor">나이(Age)</label>
+                <select class="form-control" name="age" id="age">
+                    <option>전체</option>
+                    <option>10대</option>
+                    <option>20대</option>
+                    <option>30대</option>
+                    <option>40대</option>
+                    <option>50대</option>
+                    <option>60대</option>
+                    <option>70대</option>
+                </select>           
+
+            </div>   
+                    
+            <div class="form-group col-md-6">
+                <label for="email"><span class="star">*</span>이메일(E-mail)</label>
+                <input type="email" class="form-control" name="email" id="email">
+            </div>              
+        </div>
+
+        <!-- SweetAlert 라이브러리 로딩 -->
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <!-- "검색" 단추를 누르면 팝업 레이어가 열리도록 설정 -->
+
+        <div class="mt-3" >
+            <div class="form-group">
+                <label for="address1"><span class="star">*</span>배송지(Address)</label>
+                <div class="input-group mb-3">
+                    <input type="text" name="address1" id="address1" class="form-control postcodify_postcode5" value="" readonly="" placeholder="우편번호" />
+                    <div class="input-group-append">
+                        <button id="postcodify_search_button" class="btn  btn-outline-info" type="button">주소검색</button>
+                    </div>
+                </div>
+                <input type="text" name="address2" class="form-control postcodify_address mb-3" value="" readonly="" placeholder="기본주소" />
+                <input type="text" name="address3" class="form-control postcodify_details mb-3" value="" placeholder="나머지주소" />
+            </div>
+        </div>
+                        
+<style>
+    .counter_number{padding:0px!important;}
+    .counter_number li{float:left;}
+    .counter_number li:nth-child(1){width:20%;height:37px;font-size:20px;line-height:36px;font-weight:800;}
+    .counter_number li:nth-child(2){width:60%;}
+    .counter_number li input{float:left;width:100%;text-align:center;height:36px;border:none;}
+    .counter_number li:nth-child(3){width:20%;font-size:17px;height:37px;line-height:36px;font-weight:800;}
+    /*컬러칩 부분*/
+    .s_color_chip{display:none;}
+    select option{font-size:14px;}
+    .color_select_bar option{ height: 100px;overflow-y:auto;}
+    .biz_name{display:none}
+    #middle_table{overflow:auto}
+    #middle_table table{min-width:770px;}
+</style>
+    <div id="middle_table">
+        <table class="table table-responsive-md">
+            <thead>
+                <tr>
+                    <th>제품</th>
+                    <th>비즈</th>
+                    <th>색상</th>
+                    <th>수량</th>
+                    <th>배송</th>
+                    <th>할인</th>                    
+                    <th>단가</th>
+ 
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <select class="form-control color_select_bar" id="goodsName_1"name="goodsName_1">
+                            <option   value="" disabled selected class="default-option" >제품선택</option>
+                            <option value="더블">더블</option>  
+                            <option value="맥스">맥스</option>
+                            <option value="슬림">슬림</option>
+                            <option value="미디">미디</option>
+                            <option value="미니">미니</option>      
+                            <option value="팟">팟</option>      
+                            <option value="드롭">드롭</option>      
+                            <option value="라운저">라운저</option>      
+                            <option value="피라미드">피라미드</option>      
+                            <option value="오토만">오토만</option>      
+                            <option value="허기보">허기보</option>      
+                            <option value="버블">버블</option>      
+                            <option value="허거">허거</option>
+                            <option value="모듀">모듀</option>
+                            <option value="서포트">서포트</option>
+                            <option value="롤 맥스">롤 맥스</option>
+                            <option value="롤 미니">롤 미니</option>
+                            <option value="카터필러 롤 맥스">카터필러 롤 맥스</option>
+                            <option value="카터필러 롤 미디">카터필러 롤 미디</option>
+                            <option value="롤 메이트">롤 메이트</option>
+                            <option value="캐릭터인형">캐릭터인형</option>
+                            <option value="액세서리">액세서리</option>
+                            <option value="아로마테라피">아로마테라피</option>
+                            <option value="쿠션">쿠션</option>
+                            <option value="러그">러그</option>
+                            <option value="펫">펫</option>
+                        </select>
+                    </td>                    
+                    <td>
+                        <select class="form-control color_select_bar" id="goodsBiz_1"name="goodsBiz_1">
+                            <option disabled selected class="default-option" >비즈선택</option>
+
+                            <option data-price="389000" class="max biz_name" value="맥스 스탠다드">맥스 스탠다드</option> 
+                            <option data-price="539000" class="max biz_name" value="맥스 프리미엄">맥스 프리미엄</option>
+                            <option data-price="689000" class="max biz_name" value="맥스 프리미엄 플러스">맥스 프리미엄 플러스</option>
+                            <option data-price="419000" class="max biz_name" value="줄라 맥스">줄라 맥스</option>
+                            <option data-price="569000" class="max biz_name" value="줄라 맥스 프리미엄">줄라 맥스 프리미엄</option>
+                            <option data-price="719000" class="max biz_name" value="줄라 맥스 프리미엄 플러스">줄라 맥스 프리미엄 플러스</option>
+                            <option data-price="429000" class="max biz_name" value="럭스 맥스">럭스 맥스</option>
+                            <option data-price="579000" class="max biz_name" value="럭스 맥스 프리미엄">럭스 맥스 프리미엄</option>
+                            <option data-price="729000" class="max biz_name" value="럭스 맥스 프리미엄 플러스">럭스 맥스 프리미엄 플러스</option>
+                            <option data-price="419000" class="max biz_name" value="믹스 맥스">믹스 맥스</option> 
+                            <option data-price="569000" class="max biz_name" value="믹스 맥스 프리미엄">믹스 맥스 프리미엄</option> 
+                            <option data-price="719000" class="max biz_name" value="믹스 맥스 프리미엄 플러스">믹스 맥스 프리미엄 플러스</option> 
+  
+                            
+                            <option data-price="429000" class="max biz_name" value="맥스 스타워즈">맥스 스타워즈</option> 
+                            <option data-price="579000" class="max biz_name" value="맥스 스타워즈 프리미엄">맥스 스타워즈 프리미엄</option> 
+                            <option data-price="729000" class="max biz_name" value="맥스 스타워즈 프리미엄 플러스">맥스 스타워즈 프리미엄 플러스</option> 
+
+
+                            <option class="biz_name double" data-price="769000" value="더블 스탠다드">더블 스탠다드</option> 
+                            <option class="biz_name double" data-price="1069000" value="더블 프리미엄">더블 프리미엄</option>
+                            <option class="biz_name double" data-price="1369000" value="더블 프리미엄 플러스">더블 프리미엄 플러스</option>
+
+                            <option class="biz_name prime" data-price="339000" value="프라임 스탠다드">프라임 스탠다드</option> 
+                            <option class="biz_name prime" data-price="489000" value="프라임 프리미엄">프라임 프리미엄</option>
+                            <option class="biz_name prime" data-price="639000" value="프라임 프리미엄 플러스">프라임 프리미엄 플러스</option>
+
+                            <option class="biz_name slim" data-price="319000" value="슬림 스탠다드">슬림 스탠다드</option> 
+                            <option class="biz_name slim" data-price="439000" value="슬림 프리미엄">슬림 프리미엄</option>
+                            <option class="biz_name slim" data-price="559000" value="슬림 프리미엄 플러스">슬림 프리미엄 플러스</option>
+                            <option class="biz_name slim" data-price="349000" value="줄라 슬림">줄라 슬림</option>
+                            <option class="biz_name slim" data-price="469000" value="줄라 슬림 프리미엄">줄라 슬림 프리미엄</option>
+                            <option class="biz_name slim" data-price="589000" value="줄라 슬림 프리미엄 플러스">줄라 슬림 프리미엄 플러스</option>
+                            <option class="biz_name slim" data-price="359000" value="럭스 슬림">럭스 슬림</option>
+                            <option class="biz_name slim" data-price="479000" value="럭스 슬림 프리미엄">럭스 슬림 프리미엄</option>
+                            <option class="biz_name slim" data-price="599000" value="럭스 슬림 프리미엄 플러스">럭스 슬림 프리미엄 플러스</option>
+                            <option class="biz_name slim" data-price="349000" value="믹스 슬림">믹스 슬림</option> 
+                            <option class="biz_name slim" data-price="469000" value="믹스 슬림 프리미엄">믹스 슬림 프리미엄</option> 
+                            <option class="biz_name slim" data-price="589000" value="믹스 슬림 프리미엄 플러스">믹스 슬림 프리미엄 플러스</option> 
+                            <option class="biz_name slim" data-price="349000" value="카카오프렌즈 슬림">카카오프렌즈 슬림</option> 
+                            <option class="biz_name slim" data-price="469000" value="카카오프렌즈 슬림 프리미엄">카카오프렌즈 슬림 프리미엄</option> 
+                            <option class="biz_name slim" data-price="589000" value="카카오프렌즈 슬림 프리미엄 플러스">카카오프렌즈 슬림 프리미엄 플러스</option>   
+
+                            <option class="biz_name midi" data-price="329000" value="미디 스탠다드">미디 스탠다드</option> 
+                            <option class="biz_name midi" data-price="479000" value="미디 프리미엄">미디 프리미엄</option>
+                            <option class="biz_name midi" data-price="629000" value="미디 프리미엄 플러스">미디 프리미엄 플러스</option>
+                            <option class="biz_name midi" data-price="359000" value="줄라 미디">줄라 미디</option>
+                            <option class="biz_name midi" data-price="509000" value="줄라 미디 프리미엄">줄라 미디 프리미엄</option>
+                            <option class="biz_name midi" data-price="659000" value="줄라 미디 프리미엄 플러스">줄라 미디 프리미엄 플러스</option>  
+  
+                            <option class="biz_name mini" data-price="199000" value="미니 스탠다드">미니 스탠다드</option> 
+                            <option class="biz_name mini" data-price="319000" value="미니 프리미엄">미니 프리미엄</option>
+                            <option class="biz_name mini" data-price="439000" value="미니 프리미엄 플러스">미니 프리미엄 플러스</option>   
+                            <option class="biz_name mini" data-price="229000" value="줄라 미니">줄라 미니</option>
+                            <option class="biz_name mini" data-price="349000" value="줄라 미니 프리미엄">줄라 미니 프리미엄</option>
+                            <option class="biz_name mini" data-price="469000" value="줄라 미니 프리미엄 플러스">줄라 미니 프리미엄 플러스</option>
+
+                            <option class="biz_name pod" data-price="329000" value="팟 스탠다드">팟 스탠다드</option> 
+                            <option class="biz_name pod" data-price="479000" value="팟 프리미엄">팟 프리미엄</option>
+                            <option class="biz_name pod" data-price="629000" value="팟 프리미엄 플러스">팟 프리미엄 플러스</option>
+                            <option class="biz_name pod" data-price="359000" value="줄라 팟">줄라 팟</option>
+                            <option class="biz_name pod" data-price="509000" value="줄라 팟 프리미엄">줄라 팟 프리미엄</option>
+                            <option class="biz_name pod" data-price="659000" value="줄라 팟 프리미엄 플러스">줄라 팟 프리미엄 플러스</option>   
+
+                            <option class="biz_name drop" data-price="299000" value="드롭 스탠다드">드롭 스탠다드</option> 
+                            <option class="biz_name drop" data-price="449000" value="드롭 프리미엄">드롭 프리미엄</option>
+                            <option class="biz_name drop" data-price="599000" value="드롭 프리미엄 플러스">드롭 프리미엄 플러스</option>  
+                            <option class="biz_name drop" data-price="329000" value="줄라 드롭">줄라 드롭</option>
+                            <option class="biz_name drop" data-price="479000" value="줄라 드롭 프리미엄">줄라 드롭 프리미엄</option>
+                            <option class="biz_name drop" data-price="629000" value="줄라 드롭 프리미엄 플러스">줄라 드롭 프리미엄 플러스</option>   
+
+                            <option class="biz_name drop" data-price="329000" value="믹스 드롭">믹스 드롭</option>
+                            <option class="biz_name drop" data-price="479000" value="믹스 드롭 프리미엄">믹스 드롭 프리미엄</option>
+                            <option class="biz_name drop" data-price="629000" value="믹스 드롭 프리미엄 플러스">믹스 드롭 프리미엄 플러스</option>   
+
+                            <option class="biz_name drop" data-price="329000" value="카카오프렌즈 드롭">카카오프렌즈 드롭</option> 
+                            <option class="biz_name drop" data-price="479000" value="카카오프렌즈 드롭 프리미엄">카카오프렌즈 드롭 프리미엄</option> 
+                            <option class="biz_name drop" data-price="629000" value="카카오프렌즈 드롭 프리미엄 플러스">카카오프렌즈 드롭 프리미엄 플러스</option>  
+                            <option class="biz_name drop" data-price="339000" value="스타워즈 드롭">스타워즈 드롭</option> 
+                            <option class="biz_name drop" data-price="489000" value="스타워즈 드롭 프리미엄">스타워즈 드롭 프리미엄</option> 
+                            <option class="biz_name drop" data-price="639000" value="스타워즈 드롭 프리미엄 플러스">스타워즈 드롭 프리미엄 플러스</option>  
+
+                            <option class="biz_name lounger" data-price="269000" value="라운저 스탠다드">라운저 스탠다드</option>
+                            <option class="biz_name lounger" data-price="389000" value="라운저 프리미엄">라운저 프리미엄</option>   
+                            <option class="biz_name lounger" data-price="509000" value="라운저 프리미엄 플러스">라운저 프리미엄 플러스</option>   
+                            <option class="biz_name lounger" data-price="299000" value="줄라 라운저">줄라 라운저</option>
+                            <option class="biz_name lounger" data-price="419000" value="줄라 라운저 프리미엄">줄라 라운저 프리미엄</option>
+                            <option class="biz_name lounger" data-price="539000" value="줄라 라운저 프리미엄 플러스">줄라 라운저 프리미엄 플러스</option>    
+                            <option class="biz_name lounger" data-price="309000" value="럭스 라운저">럭스 라운저</option>
+                            <option class="biz_name lounger" data-price="429000" value="럭스 라운저 프리미엄">럭스 라운저 프리미엄</option>
+                            <option class="biz_name lounger" data-price="549000" value="럭스 라운저 프리미엄 플러스">럭스 라운저 프리미엄 플러스</option>    
+                            <option class="biz_name lounger" data-price="309000" value="스타워즈 라운저">스타워즈 라운저</option> 
+                            <option class="biz_name lounger" data-price="429000" value="스타워즈 라운저 프리미엄">스타워즈 라운저 프리미엄</option> 
+                            <option class="biz_name lounger" data-price="549000" value="스타워즈 라운저 프리미엄 플러스">스타워즈 라운저 프리미엄 플러스</option>   
+                            <option class="biz_name lounger" data-price="299000" value="믹스 라운저">믹스 라운저</option> 
+                            <option class="biz_name lounger" data-price="419000" value="믹스 라운저 프리미엄">믹스 라운저 프리미엄</option> 
+                            <option class="biz_name lounger" data-price="539000" value="믹스 라운저 프리미엄 플러스">믹스 라운저 프리미엄 플러스</option>   
+
+                            <option class="biz_name pyramid" data-price="169000"  value="피라미드 스탠다드">피라미드 스탠다드</option>
+                            <option class="biz_name pyramid" data-price="269000"  value="피라미드 프리미엄">피라미드 프리미엄</option>   
+                            <option class="biz_name pyramid" data-price="369000"  value="피라미드 프리미엄 플러스">피라미드 프리미엄 플러스</option>  
+                            <option class="biz_name pyramid" data-price="199000" value="줄라 피라미드">줄라 피라미드</option>
+                            <option class="biz_name pyramid" data-price="299000" value="줄라 피라미드 프리미엄">줄라 피라미드 프리미엄</option>
+                            <option class="biz_name pyramid" data-price="399000" value="줄라 피라미드 프리미엄 플러스">줄라 피라미드 프리미엄 플러스</option>    
+                            <option class="biz_name pyramid" data-price="199000" value="카카오프렌즈 피라미드">카카오프렌즈 피라미드</option>
+                            <option class="biz_name pyramid" data-price="299000" value="카카오프렌즈 피라미드 프리미엄">카카오프렌즈 피라미드 프리미엄</option>
+                            <option class="biz_name pyramid" data-price="399000" value="카카오프렌즈 피라미드 프리미엄 플러스">카카오프렌즈 피라미드 프리미엄 플러스</option>  
+
+                            <option class="biz_name ottoman" data-price="139000" value="오토만 스탠다드">오토만 스탠다드</option>
+                            <option class="biz_name ottoman" data-price="239000" value="오토만 프리미엄">오토만 프리미엄</option>
+                            <option class="biz_name ottoman" data-price="379000" value="오토만 프리미엄 플러스">오토만 프리미엄 플러스</option>
+                            <option class="biz_name ottoman" data-price="179000" value="럭스 오토만">럭스 오토만</option>
+                            <option class="biz_name ottoman" data-price="279000" value="럭스 오토만 프리미엄">럭스 오토만 프리미엄</option>
+                            <option class="biz_name ottoman" data-price="379000" value="럭스 오토만 프리미엄 플러스">럭스 오토만 프리미엄 플러스</option>
+                            <option class="biz_name ottoman" data-price="179000" value="스타워즈 럭스 오토만">스타워즈 오토만</option>
+                            <option class="biz_name ottoman" data-price="279000" value="스타워즈 오토만 프리미엄">스타워즈 오토만 프리미엄</option>
+                            <option class="biz_name ottoman" data-price="379000" value="스타워즈 오토만 프리미엄 플러스">스타워즈 오토만 프리미엄 플러스</option>
+
+
+                            
+                            <option class="biz_name hugibo" data-price="259000" value="허기보">허기보 </option>
+                            <option class="biz_name hugibo" data-price="339000" value="허기보 프리미엄">허기보 프리미엄</option>
+                            <option class="biz_name hugibo" data-price="419000" value="허기보 프리미엄 플러스">허기보 프리미엄 플러스</option>  
+
+                            <option class="biz_name bubble" data-price="309000"  value="디즈니 미니 버블">디즈니 미니 버블</option>
+                            <option class="biz_name bubble" data-price="389000"  value="디즈니 미니 버블 프리미엄">디즈니 미니 버블 프리미엄</option>
+                            <option class="biz_name bubble" data-price="549000"  value="디즈니 미니 버블 프리미엄 플러스">디즈니 미니 버블 프리미엄 플러스</option>
+
+                            <option class="biz_name bubble" data-price="309000" value="디즈니 미키 버블">디즈니 미키 버블</option>
+                            <option class="biz_name bubble" data-price="389000" value="디즈니 미키 버블 프리미엄">디즈니 미키 버블 프리미엄</option>
+                            <option class="biz_name bubble" data-price="549000" value="디즈니 미키 버블 프리미엄 플러스">디즈니 미키 버블 프리미엄 플러스</option>
+
+                            <option class="biz_name hugger" data-price="309000" value="토이스토리 우디 허거">토이스토리 우디 허거</option>
+                            <option class="biz_name hugger" data-price="429000" value="토이스토리 우디 허거 프리미엄">토이스토리 우디 허거 프리미엄</option>
+                            <option class="biz_name hugger" data-price="549000" value="토이스토리 우디 허거 프리미엄 플러스">토이스토리 우디 허거 프리미엄 플러스</option>
+
+                            <option class="biz_name hugger" data-price="309000" value="토이스토리 버즈 허거">토이스토리 버즈 허거</option>
+                            <option class="biz_name hugger" data-price="429000" value="토이스토리 버즈 허거 프리미엄">토이스토리 버즈 허거 프리미엄</option>
+                            <option class="biz_name hugger" data-price="549000" value="토이스토리 버즈 허거 프리미엄 플러스">토이스토리 버즈 허거 프리미엄 플러스</option>
+
+                            <option class="biz_name hugger" data-price="309000" value="토이스토리 알린 허거">토이스토리 알린 허거</option>
+                            <option class="biz_name hugger" data-price="429000" value="토이스토리 알린 허거 프리미엄">토이스토리 알린 허거 프리미엄</option>
+                            <option class="biz_name hugger" data-price="549000" value="토이스토리 알린 허거 프리미엄 플러스">토이스토리 알린 허거 프리미엄 플러스</option>
+
+                            <option class="biz_name hugger" data-price="309000" value="디즈니 미키 허거">디즈니 미키 허거</option>
+                            <option class="biz_name hugger" data-price="429000" value="디즈니 미키 허거 프리미엄">디즈니 미키 허거 프리미엄</option>
+                            <option class="biz_name hugger" data-price="549000" value="디즈니 미키 허거 프리미엄 플러스">디즈니 미키 허거 프리미엄 플러스</option>
+
+                            <option class="biz_name hugger" data-price="309000" value="디즈니 미니 허거">디즈니 미니 허거</option>
+                            <option class="biz_name hugger" data-price="429000" value="디즈니 미니 허거 프리미엄">디즈니 미니 허거 프리미엄</option>
+                            <option class="biz_name hugger" data-price="549000" value="디즈니 미니 허거 프리미엄 플러스">디즈니 미니 허거 프리미엄 플러스</option>
+
+                            <option class="biz_name hugger" data-price="309000" value="디즈니 도날드 허거">디즈니 도날드 허거</option>
+                            <option class="biz_name hugger" data-price="429000" value="디즈니 도날드 허거 프리미엄">디즈니 도날드 허거 프리미엄</option>
+                            <option class="biz_name hugger" data-price="549000" value="디즈니 도날드 허거 프리미엄 플러스">디즈니 도날드 허거 프리미엄 플러스</option>
+
+
+
+                            <option class="biz_name modju" data-price="649000" value="모듀 소파 코너">모듀 소파 코너</option>
+                            <option class="biz_name modju" data-price="589000" value="모듀 소파 탑">모듀 소파 탑</option>
+                            <option class="biz_name modju" data-price="419000" value="모듀 소파 베이스">모듀 소파 베이스</option>
+                            <option class="biz_name modju" data-price="54000" value="모듀 스퀘어 필로우">모듀 스퀘어 필로우</option>
+                            <option class="biz_name modju" data-price="54000" value="모듀 롤 닷">모듀 롤 닷</option>
+
+
+
+                            <option class="biz_name support" data-price="179000" value="서포트 스탠다드">서포트 스탠다드</option>
+                            <option class="biz_name support" data-price="279000" value="서포트 프리미엄">서포트 프리미엄</option>
+                            <option class="biz_name support" data-price="379000" value="서포트 프리미엄 플러스">서포트 프리미엄 플러스</option>
+
+                            <option class="biz_name support" data-price="209000" value="줄라 서포트">줄라 서포트</option>
+                            <option class="biz_name support" data-price="309000" value="줄라 서포트 프리미엄">줄라 서포트 프리미엄</option>
+                            <option class="biz_name support" data-price="409000" value="줄라 서포트 프리미엄 플러스">줄라 서포트 프리미엄 플러스</option>
+
+                            <option class="biz_name support" data-price="219000" value="럭스 서포트">럭스 서포트</option>
+                            <option class="biz_name support" data-price="319000" value="럭스 서포트 프리미엄">럭스 서포트 프리미엄</option>
+                            <option class="biz_name support" data-price="419000" value="럭스 서포트 프리미엄 플러스">럭스 서포트 프리미엄 플러스</option>   
+
+                            <option class="biz_name support" data-price="209000" value="카카오프렌즈 서포트">카카오프렌즈 서포트</option>
+                            <option class="biz_name support" data-price="309000" value="카카오프렌즈 서포트 프리미엄">카카오프렌즈 서포트 프리미엄</option>
+                            <option class="biz_name support" data-price="409000" value="카카오프렌즈 서포트 프리미엄 플러스">카카오프렌즈 서포트 프리미엄 플러스</option>  
+
+                            <option class="biz_name support" data-price="219000" value="스타워즈 서포트">스타워즈 서포트</option>
+                            <option class="biz_name support" data-price="319000" value="스타워즈 서포트 프리미엄">스타워즈 서포트 프리미엄</option>
+                            <option class="biz_name support" data-price="419000" value="스타워즈 서포트 프리미엄 플러스">스타워즈 서포트 프리미엄 플러스</option>                          
+
+                            <option class="biz_name rollmax" data-price="199000" value="롤 맥스">롤 맥스</option>
+                            <option class="biz_name rollmax" data-price="299000" value="롤 맥스 프리미엄">롤 맥스 프리미엄</option>
+                            <option class="biz_name rollmax" data-price="399000" value="롤 맥스 프리미엄 플러스">롤 맥스 프리미엄 플러스</option>  
+
+                            <option class="biz_name rollmax" data-price="229000" value="믹스 롤 맥스">믹스 롤 맥스 </option>
+                            <option class="biz_name rollmax" data-price="329000" value="믹스 롤 맥스 프리미엄">믹스 롤 맥스 프리미엄</option>
+                            <option class="biz_name rollmax" data-price="429000" value="믹스 롤 맥스 프리미엄 플러스">믹스 롤 맥스 프리미엄 플러스</option>  
+ 
+                            <option class="biz_name rollmax" data-price="239000" value="럭스 롤 맥스">럭스 롤 맥스</option>
+                            <option class="biz_name rollmax" data-price="339000" value="럭스 롤 맥스 프리미엄">럭스 롤 맥스 프리미엄</option>
+                            <option class="biz_name rollmax" data-price="439000" value="럭스 롤 맥스 프리미엄 플러스">럭스 롤 맥스 프리미엄 플러스</option>  
+                            
+
+
+                            <option class="biz_name rollmini" data-price="84000" value="롤 미니">롤 미니</option>
+                            <option class="biz_name rollmini" data-price="154000"  value="롤 미니 프리미엄">롤 미니 프리미엄</option>
+
+                            <option class="biz_name caterpillarRollmax" data-price="189000" value="카터필러 롤 맥스">카터필러 롤 맥스</option>
+                            <option class="biz_name caterpillarRollmax" data-price="289000" value="카터필러 롤 맥스 프리미엄">카터필러 롤 맥스 프리미엄</option>
+                            <option class="biz_name caterpillarRollmax" data-price="389000" value="카터필러 롤 맥스 프리미엄 플러스">카터필러 롤 맥스 프리미엄 플러스</option>     
+
+                            <option class="biz_name caterpillarRollmidi" data-price="124000" value="카터필러 롤 미디">카터필러 롤 미디</option>
+                            <option class="biz_name caterpillarRollmidi" data-price="204000" value="카터필러 롤 미디 프리미엄">카터필러 롤 미디 프리미엄</option>
+
+                            <option class="biz_name caterpillarRollmidi" data-price="144000" value="카카오프렌즈 카터필러 롤 미디">카카오프렌즈 카터필러 롤 미디</option>
+                            <option class="biz_name caterpillarRollmidi" data-price="224000" value="카카오프렌즈 카터필러 롤 미디 프리미엄">카카오프렌즈 카터필러 롤 미디 프리미엄</option>
+
+
+                            <option class="biz_name rollmate" data-price="94000" value="앨리게이터 롤 메이트">앨리게이터 롤 메이트</option>
+                            <option class="biz_name rollmate" data-price="94000" value="팍스 롤 메이트">팍스 롤 메이트</option>
+                            <option class="biz_name rollmate" data-price="94000" value="도그 롤 메이트">도그 롤 메이트</option>
+                            <option class="biz_name rollmate" data-price="94000" value="유니콘 롤 메이트">유니콘 롤 메이트</option>
+                            <option class="biz_name rollmate" data-price="94000" value="판다 롤 메이트">판다 롤 메이트</option>
+    
+
+                            <!--캐릭터인형-->
+                            <option class="biz_name mate" data-price="94000" value="판다 롤 메이트">판다 롤 메이트</option>                                
+                            <option class="biz_name mate" data-price="78800" value="팍스 메가 메이트,페스터스">팍스 메가 메이트,페스터스</option>
+                            <option class="biz_name mate" data-price="78800" value="유니콘 메가 메이트,유니크">유니콘 메가 메이트,유니크</option>                                       
+                            <option class="biz_name mate" data-price="58800" value="스타워즈 다스 베이더 메이트">스타워즈 다스 베이더 메이트</option>
+                            <option class="biz_name mate" data-price="58800" value="스타워즈 더 차일드 그로구 메이트">스타워즈 더 차일드 그로구 메이트</option>
+                            <option class="biz_name mate" data-price="58800" value="스타워즈 츄바카 메이트">스타워즈 츄바카 메이트</option>
+                            <option class="biz_name mate" data-price="58800" value="스타워즈 스톰트루퍼 메이트">스타워즈 스톰트루퍼 메이트</option>
+                            <option class="biz_name mate" data-price="58800" value="스타워즈 포그 메이트">스타워즈 포그 메이트</option>
+                            <option class="biz_name mate" data-price="58800" value="스타워즈 요다 메이트">스타워즈 요다 메이트</option>
+                            <option class="biz_name mate" data-price="58800" value="스타워즈 이웍 메이트">스타워즈 이웍 메이트</option>
+                            <option class="biz_name mate" data-price="58800" value="스타워즈 R2-D2 메이트">스타워즈 R2-D2 메이트</option>
+                            <option class="biz_name mate" data-price="58800" value="스타워즈 BB-8 메이트">스타워즈 BB-8 메이트</option>    
+                            <option class="biz_name mate" data-price="58800" value="스타워즈 만달로리안 메이트">스타워즈 만달로리안 메이트</option>                                                
+                            <option class="biz_name mate" data-price="58800" value="디즈니 미니 메이트">디즈니 미니 메이트</option>
+                            <option class="biz_name mate" data-price="58800" value="디즈니 도날드 메이트">디즈니 도날드 메이트</option>
+                            <option class="biz_name mate" data-price="58800" value="디즈니 미키 메이트 레인보우">디즈니 미키 메이트 레인보우</option>
+                            <option class="biz_name mate" data-price="38800" value="샤크 메이트,지그프리트">샤크 메이트,지그프리트</option>
+                            <option class="biz_name mate" data-price="38800" value="지라프 메이트,조젯">지라프 메이트,조젯</option>
+                            <option class="biz_name mate" data-price="38800" value="헤지호그 메이트,휴고">헤지호그 메이트,휴고</option>
+                            <option class="biz_name mate" data-price="38800" value="코알라 메이트,케빈">코알라 메이트,케빈</option>
+                            <option class="biz_name mate" data-price="38800" value="펭귄 메이트,펄">펭귄 메이트,펄</option>
+                            <option class="biz_name mate" data-price="38800" value="라쿤 메이트,로미">라쿤 메이트,로미</option>
+                            <option class="biz_name mate" data-price="38800" value="판다 메이트,셸비">판다 메이트,셸비</option>
+                            <option class="biz_name mate" data-price="38800" value="멍키 메이트,모리슨">멍키 메이트,모리슨</option>
+                            <option class="biz_name mate" data-price="38800" value="아울 메이트,오파">아울 메이트,오파</option>   
+                            <option class="biz_name mate" data-price="38800" value="퍼플 캣 메이트, 칼리스타">퍼플 캣 메이트, 칼리스타</option>   
+
+
+                             <!--액세서리-->
+                             <option class="biz_name acc" data-price="159000" value="요가보">요가보</option>      
+                             <option class="biz_name acc" data-price="149000" value="요기박스 그랑데">요기박스 그랑데</option>                                                 
+                             <option class="biz_name acc" data-price="119000" value="코지보">코지보</option>    
+                             <option class="biz_name acc" data-price="47800" value="코지보 트래블">코지보 트래블</option>                                                    
+                             <option class="biz_name acc" data-price="71800" value="트레이보 엑스">트레이보 엑스</option>
+                             <option class="biz_name acc" data-price="69800" value="요기박스 큐브 2.0">요기박스 큐브 2.0</option>                    
+                             <option class="biz_name acc" data-price="42800" value="타블로 엑스">타블로 엑스</option>
+                             <option class="biz_name acc" data-price="37800" value="타블로">타블로</option>  
+                             <option class="biz_name acc" data-price="32800" value="캔버스 쿠션 스퀘어">캔버스 쿠션 스퀘어</option>  
+                             <option class="biz_name acc" data-price="24800" value="월 아트">월 아트</option>     
+                             <option class="biz_name acc" data-price="19800" value="볼 맥스">볼 맥스</option>                                                                                                                                      
+                             <option class="biz_name acc" data-price="18800" value="스타워즈 스퀴지보">스타워즈 스퀴지보</option>   
+                             <option class="biz_name acc" data-price="18800" value="디즈니 스퀴지보">디즈니 스퀴지보</option>   
+                             <option class="biz_name acc" data-price="18800" value="토이스토리 스퀴지보">토이스토리 스퀴지보</option>                                                                  
+                             <option class="biz_name acc" data-price="15800" value="스퀴지보 애니멀">스퀴지보 애니멀</option>
+                             <option class="biz_name acc" data-price="15800" value="스퀴지보 하트">스퀴지보 하트</option>                            
+                             <option class="biz_name acc" data-price="12800" value="솔리드 스퀴지보">솔리드 스퀴지보</option>
+                             <option class="biz_name acc" data-price="12800" value="캔버스 쿠션 미니">캔버스 쿠션 미니</option>
+                             <option class="biz_name acc" data-price="12800" value="볼 미니">볼 미니</option>                          
+                             <option class="biz_name acc" data-price="9800" value="샤이니보">샤이니보</option>
+                             <option class="biz_name acc" data-price="4800" value="패브릭 물감">패브릭 물감</option>
+
+                              <!--아로마테라피-->
+                              <option class="biz_name aroma" data-price="19800" value="사이너스 마이너스 2.0 클레이">사이너스 마이너스 2.0 클레이</option>
+                              <option class="biz_name aroma" data-price="39800" value="숄더 원더 클레이">숄더 원더 클레이</option>
+                              <option class="biz_name aroma" data-price="39800" value="백 마이스터 클레이">백 마이스터 클레이</option>
+                              <option class="biz_name aroma" data-price="29800" value="키보드 쿠션 2.0 클레이">키보드 쿠션 2.0 클레이</option>
+                              <option class="biz_name aroma" data-price="39800" value="바디 허그 2.0 클레이">바디 허그 2.0 클레이</option>
+                              <option class="biz_name aroma" data-price="24800" value="보 도우">보 도우</option>
+                              <option class="biz_name aroma" data-price="39800" value="아로마 슬리퍼">아로마 슬리퍼</option>
+                              <!--쿠션-->
+                            <option class="biz_name cushion" data-price="47800" value="냅 엑스">냅 엑스</option>
+                            <option class="biz_name cushion" data-price="49800" value="라운드 필로우">라운드 필로우</option>
+                            <option class="biz_name cushion" data-price="42800" value="지퍼롤">지퍼롤</option>
+                            <option class="biz_name cushion" data-price="44800" value="하트 필로우">하트 필로우</option>
+                            <option class="biz_name cushion" data-price="119000" value="메가 문 필로우">메가 문 필로우</option>
+                                <!--러그-->
+                            <option class="biz_name rug" data-price="184000" value="요기보 콜렉션 러그 스퀘어 라지">요기보 콜렉션 러그 스퀘어 라지</option>
+                            <option class="biz_name rug" data-price="144000" value="요기보 콜렉션 러그 라운드">요기보 콜렉션 러그 라운드</option>
+                            <option class="biz_name rug" data-price="104000" value="요기보 콜렉션 러그 스퀘어 스몰">요기보 콜렉션 러그 스퀘어 스몰</option>
+                            <!--펫-->
+                            <option class="biz_name dog" data-price="129000" value="도기보 미디">도기보 미디</option>
+
+                        </select>
+                    </td>                 
+                    <td>
+                        <select class="form-control" id="goodsColor_1" name="goodsColor_1">
+                            <option disabled selected class="default-option" >색상선택</option>
+                            <option class="s_color_chip"  value="블라썸핑크">블라썸핑크</option>
+                            <option class="s_color_chip"  value="리빙코랄">리빙코랄</option>
+                            <option class="s_color_chip"  value="아보카도그린">아보카도그린</option>
+                            <option class="s_color_chip"  value="프레시민트">프레시민트</option>
+                            <option class="s_color_chip"  value="파스텔블루">파스텔블루</option>
+                            <option class="s_color_chip"  value="라벤더퍼플">라벤더퍼플</option>
+                            <option class="s_color_chip"  value="체리레드">체리레드</option>
+                            <option class="s_color_chip"  value="로즈핑크">로즈핑크</option>
+                            <option class="s_color_chip"  value="와인버건디">와인버건디</option>
+                            <option class="s_color_chip"  value="스위트오렌지">스위트오렌지</option>
+                            <option class="s_color_chip"  value="브라이트옐로">브라이트옐로</option>
+                            <option class="s_color_chip"  value="올리브그린">올리브그린</option>
+                            <option class="s_color_chip"  value="아쿠아블루">아쿠아블루</option>
+                            <option class="s_color_chip"  value="네이비블루">네이비블루</option>
+                            <option class="s_color_chip"  value="초코브라운">초코브라운</option>
+                            <option class="s_color_chip"  value="라이트그레이">라이트그레이</option>
+                            <option class="s_color_chip"  value="다크그레이">다크그레이</option>
+                            <option class="s_color_chip"  value="브라이트퍼플">브라이트퍼플</option>
+                            <option class="s_color_chip"  value="딥퍼플">딥퍼플</option>
+                            <option class="s_color_chip"  value="레인보우">레인보우</option>
+                            <option class="s_color_chip"  value="뉴트럴">뉴트럴</option>
+                            <option class="s_color_chip"  value="라이언">라이언</option>
+                            <option class="s_color_chip"  value="어피치">어피치</option>
+                            <option class="s_color_chip"  value="제국군">제국군</option>
+                            <option class="s_color_chip"  value="반란군">반란군</option>
+                            <option class="s_color_chip"  value="스톤">스톤</option>
+                            <option class="s_color_chip"  value="스카이">스카이</option>
+                            <option class="s_color_chip"  value="그라스">그라스</option>
+                            <option class="s_color_chip"  value="시트러스">시트러스</option>
+                            <option class="s_color_chip"  value="오션">오션</option>
+                            <option class="s_color_chip"  value="마린">마린</option>
+                            <option class="s_color_chip"  value="오닉스">오닉스</option>
+                            <option class="s_color_chip"  value="스노우">스노우</option>
+                            <option class="s_color_chip"  value="블랙펄">블랙펄</option>
+                        </select>
+                    </td>
+                    <td>
+                        <ul class="counter_number form-control">
+                            <li onclick="decreaseValue(document.getElementById('goodsCounter_1'))" style="cursor: pointer;">-</li>
+                            <li><input type="text" class=" counter" id="goodsCounter_1" name="goodsCounter_1" value="1"></li>
+                            <li onclick="increaseValue(document.getElementById('goodsCounter_1'))" style="cursor: pointer;">+</li>
+                        </ul>
+                    </td>
+      
+                    <td>
+                        <select class="form-control" id="goodsDelivery_1" name="goodsDelivery_1">
+                            <option data-shipping-cost="0" style="text-indent:20px;" >무료배송</option>
+                            <option data-shipping-cost="5000">5,000원</option>
+                            <option data-shipping-cost="7000">7,000원</option>
+                            <option data-shipping-cost="10000">10,000원</option>
+                            <option data-shipping-cost="14000">14,000원</option>
+                            <option data-shipping-cost="15000">15,000원</option>
+                            <option data-shipping-cost="20000">20,000원</option>
+                            <option data-shipping-cost="30000">30,000원</option>
+                            <option data-shipping-cost="40000">40,000원</option>
+                            <option data-shipping-cost="60000">60,000원</option>
+                            <option data-shipping-cost="80000">80,000원</option>
+                            <option data-shipping-cost="160000">160,000원</option>
+                        </select>
+                    </td>
+    
+                    <td>
+                        <select class="form-control" id="goodsDiscount_1" name="goodsDiscount_1">
+                            <option >0%</option>
+                            <option>3%</option>
+                            <option>5%</option>
+                            <option >10%</option>
+                            <option >15%</option>
+                            <option >20%</option>
+                            <option >25%</option>
+                        </select>
+                    </td>
+                    <td><input type="text" class="form-control" id="goodsPrice_1" name="goodsPrice_1" placeholder="상품금액" readonly></td>
+                    <td class="remove_addGoods">X</td>
+                </tr>
+                <!-- 추가적인 행을 추가하실 수 있습니다 -->
+            </tbody>         
+        </table>
+    </div>
+<script>
+    $(document).ready(function() {
+    $('.table tbody').on('click touchstart', '.remove_addGoods', function() {
+        $(this).closest('tr').remove();
+          updateTotalPrice();
+    });
+});
+</script>
+        <div id="addProduct" class="btn  btn-outline-info">상품 추가</div>
+        <div class></div>
+        <div class="totalPriceContainer mt-4">
+            <strong>총합계: </strong>
+            <input type="text" id="totalPrice" name="totalPrice" 
+            style="text-align:right;width:auto;border:none;width:160px;" readonly
+            > <strong>원</strong>
+        </div>
+
+        <div class="form-row mt-4">
+            <div class="form-group col-md-12 mt-4" >
+                <table class="deliver-table">
+                    <thead>
+                        <tr>
+                            <th>제품명<br/><span>Product Name</span></th>
+                            <th>기본운임(편도)<br/><span>cargo rate</span></th>
+                            <th>도서산간/제주<br/><span>exceptional region</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>더블</td>
+                            <td>&nbsp;80,000원</td>
+                            <td>&nbsp;160,000원</td>                           
+                        </tr>
+                        <tr>
+                            <td>맥스</td>
+                            <td>&nbsp;40,000원</td>
+                            <td>&nbsp;80,000원</td>                           
+                        </tr>       
+                        <tr>
+                            <td>미디,팟,슬림,프라임,허기보</td>
+                            <td>&nbsp;30,000원</td>
+                            <td>&nbsp;60,000원</td>                           
+                        </tr>           
+                        <tr>
+                            <td>드롭,롤맥스,라운저,피라미드,미니,허거,버블</td>
+                            <td>&nbsp;20,000원</td>
+                            <td>&nbsp;40,000원</td>                           
+                        </tr>    
+                        <tr>
+                            <td>그랑데,오토만,도기보미디,요기보큐브,서포트,카터필러 롤 맥스</td>
+                            <td>&nbsp;15,000원</td>
+                            <td>&nbsp;30,000원</td>                           
+                        </tr>
+                        <tr>
+                            <td>러그</td>
+                            <td>&nbsp;&nbsp;7,000원</td>
+                            <td>&nbsp;14,000원</td>                           
+                        </tr>  
+
+                        <tr>
+                            <td>
+                                도비고 미니,모듀롤닷,디즈니서포트,모듀 스퀘어필로우,라운드필로우,슬리피보,롤 메이트,요가보,롤 미니,요기박스 큐브,
+                                롤 미디,월 아트,롤 스마일, 카터필러 롤미디, 리필 비즈,코지보 메가 메이트,메가문 필로우,트레이보,트레이보X,메이트 시트,하트 필로우,메이트 필로우
+                            </td>
+                            <td>&nbsp;&nbsp;5,000원</td>
+                            <td>&nbsp;10,000원</td>                           
+                        </tr>   
+ 
+                        <tr>
+                            <td>
+                                냅,냅 메이트,냅X 리스트위즈,미니 하트 필로우,바디 허그, 롤 닷,백 마이스터, 메이트,보 도우, 문 필로우, 사이너스 마이너스,
+                                볼 맥스,볼 미니, 숄더 윈더,캔버스 쿠션 스퀘어, 샤이니보, 코지보 라이트, 스퀴지보,코지보트래블,슬리퍼류,타블로,타블로X,지퍼롤,캔버스 쿠션 미니,패브릭 물감,
+                                커버,헤드피스쿨
+                            </td>
+                            <td>&nbsp;&nbsp;3,000원</td>
+                            <td>&nbsp;&nbsp;6,000원</td>                           
+                        </tr>                                                                                                                                                  
+                    </tbody>                    
+                </table>
+            </div> 
+            <div class="form-group col-md-12 mt-2" >
+                <div class="offcanvas-body">
+                    -제작 상품의 경우 출고 1일 전 취소가 가능합니다.<br/>
+                    -제품 수령 후 포장 박스에 있는 개봉 전 주의사항을 꼭 확인하세요<br/>
+                    -고객 변심 또는 만족도 불만에 따른 교환/반품 시 왕복 배송비는 고객 부담입니다<br/>
+                    -단, 유의사항 등 사용자 부주의로 인한 하자는 별도의 비용이 발생할 수 있습니다<br/>
+                    -사용 전 제품과 함께 동봉 된 카탈로그에 있는 취급 주의사항을 꼭 읽어 보시기 바랍니다<br/>
+                    -빈백소파와 바디필로우의 경우 주문제작 제품으로 업무제작일 기준 1~5일 정도 송요됩니다&nbsp;&nbsp;[일부상품제외]<br/>
+                    -제품에 따라 배송비가 다르며, 제품별 배송비는 우측 표를 참고하시길 바랍니다<br/>
+                    -제품 부피에 따라 화물택배로 배송되며,일반택배와 다르게 배송 기간이 길어질 수 있는 점 양해 부탁드립니다<br/>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12 mt-4 infor_txt" >
+                <ul>
+                    <li>위 기입한 구매 제품의 정보(제품명,색상,수량 등) 및 제품 관련 안내사항을 모두 확인하였습니다</li>
+                    <li>I here by confirm for the details of purchase confirmation(item,Name,Color and notice of products)</li>
+                    <li class="purchase_confirm">
+                        <div class="new_title"><span>구매일자 : </span></div>&nbsp;
+
+                        <div class="new_data"></div>
+
+                        <div class="signature"> <%- include('../signature.html') %></div>
+                    </li> 
+                    <li style="margin-top:10px;">(주)요기코퍼레이션 대표이사</li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12 mt-4 " >
+                <div class="individal">
+                    <dl>
+                        <dt>개인정보 수집 이용 동의(필수)</dt>
+                        <dd>
+                            <ul>
+                                <li>개인정보의 수집 이용목적</li>
+                                <li>고객이 수취를 원하는 장소로 제품을 배송하는 서비스 (택배)</li>
+                                <li>제품의 사후 관리 및 A/S 동의 서비스 제공 수집하려는 개인 정보의 항목 고객명,연락처,고객주소,수취인명,E-mail주소</li>
+                            </ul>
+                        </dd>
+                        <dt>개인정보의 보유 및 이용기간</dt>
+                        <dd>
+                            <ul>
+                                <li>
+                                    보유기간:개인 정보 수집 및 이용 목적이 달성되거나 고객이 파기를 요청하는 경우 지체 없이 파기
+                                    단 관련 법규에 따라 보관 의무가 있는 경우에는 해당 기간 보관 후 파기
+                                    수집 거부:필수 항목인 개인 정보 수집 이용에 대해 동의를 거부하실 수 있으나, 
+                                    서비스 제공에 필수적으로 제공되어야 하는 정보이므로 동의를 거부하실 경우 배송 서비스 불가
+                                </li>
+                                <div class="period_info">개인정보 수집 이용에 동의하십니까? <input type="checkbox" name="individal_ck" > <label>동의함</label></div>
+                            </ul>
+                        </dd>                        
+                    </dl>
+                
+                    <dl>
+                        <dt>개인 정보 제3자 제공에 대한 별도 동의(필수)</dt>
+                        <dd>
+                            <ul>
+                                <li>개인 정보를 제공받는 자 : (주)경동물류,롯데글로벌로지스(롯데택배)</li>
+                                <li>개인 정보를 제공받는 자의 개인정보 이용 목적: 고객이 구매한 재화를 목적지까지 배송</li>
+                                <li>제공하는 개인 정보의 항목: 배송에 필요한 수취인정보(이름/주소/유무선 전화번호)</li>
+                                <li>개인 정보를 제공받는 자의 개인 정보 보유 및 이용 기간:제휴 후 1년 동의를 거부할 수 있으며, 동의 거부 시 배송/설치 서비스가 제공되지 않습니다</li>
+                                <div class="period_info">위 개인정보 제 3자 제공에 대해 동의하십니까? <input type="checkbox" name="individal_3_ck"> <label>동의함</label></div>
+                            </ul>
+                        </dd>
+                    </dl>   
+
+                </div>
+            </div>
+        </div>
+
+        <button type="submit"id="result_confirm" class="btn  btn-outline-info col-md-12 mt-4 entry_info" type="button">최종 주문 확인</button>
+    </form>
+
+    <footer class="mt-4">
+        <ul>
+            <li>입금계좌(Bank Account):하나은행 347-910016-10604, (주)요기코퍼레이션(Yogi Corporation Inc.)</li>
+            <li>www.yogibo.kr</li>
+        </ul>
+    </footer>
+
+</div>
+<!-- 부트스트랩 JS 및 Popper.js -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+<script>
+    //자동연락처 변경함수
+    $(document).on('input', '#phoneNumber', '#phone2',function() {
+        var number = $(this).val().replace(/[^0-9]/g, '');  // 숫자만 추출
+        var phone = '';
+        if(number.length < 4) {
+            return number;
+        } else if(number.length < 7) {
+            phone += number.substr(0, 3);
+            phone += '-';
+            phone += number.substr(3);
+        } else if(number.length < 11) {
+            phone += number.substr(0, 3);
+            phone += '-';
+            phone += number.substr(3, 3);
+            phone += '-';
+            phone += number.substr(6);
+        } else {
+            phone += number.substr(0, 3);
+            phone += '-';
+            phone += number.substr(3, 4);
+            phone += '-';
+            phone += number.substr(7, 4);
+        }
+        $(this).val(phone);
+    });
+
+  //submit action관련 경고창 띄우기 코드
+        document.getElementById("form1").addEventListener("submit", function (e) {
+                const receiverValue = document.getElementById("receiver").value;
+                const phoneNumberValue = document.getElementById("phoneNumber").value;
+                const emailValue = document.getElementById("email").value;
+                const addressValue = document.querySelector(".postcodify_address").value;
+                const individualCk = document.getElementsByName("individal_ck")[0].checked;
+                const individual3Ck = document.getElementsByName("individal_3_ck")[0].checked;
+                const signtrue = document.getElementById('hiddenSignatureInput').value;
+                let formIsValid = true;
+
+                if (!receiverValue) {
+                    alert("수취인을 입력해주세요.");
+                    formIsValid = false;
+                }
+                if (!phoneNumberValue) {
+                    alert("연락처를 입력해주세요.");
+                    formIsValid = false;
+                }
+                if (!emailValue) {
+                    alert("이메일을 입력해주세요.");
+                    formIsValid = false;
+                }
+                if (!addressValue) {
+                    alert("배송지를 입력해주세요.");
+                    formIsValid = false;
+                }
+                if (!individualCk) {
+                    alert("개인정보 수집 이용에 동의해주세요.");
+                    formIsValid = false;
+                }
+                if (!individual3Ck) {
+                    alert("개인 정보 제3자 제공에 대한 동의를 해주세요.");
+                    formIsValid = false;
+                }
+                if (!signtrue) {
+                    alert('서명하기를 확인 해주세요');
+                    formIsValid = false;
+                }
+
+                if (!formIsValid) {
+                    e.preventDefault();
+                } else {
+                    document.getElementById('result_confirm').addEventListener('click', function (event) {
+                        event.preventDefault();
+                        const userResponse = confirm('최종주문완료시 주문완료페이지로 이동합니다.');
+                        document.getElementById('form1').submit();
+                    });
+                }
+            });
+        // 판매처 선택창
+        var storeSelect = document.getElementById('store');
+        // 판매자 선택창
+        var staffSelect = document.getElementById('staff');
+
+        // 판매처 선택이 변경될 때 이벤트 리스너 추가
+        storeSelect.addEventListener('change', async function() {
+            var selectedStore = this.value;
+
+            // 판매자 선택창 초기화
+            staffSelect.innerHTML = '<option value="전체">전체</option>';
+
+            try {
+                // 서버에서 데이터 가져오기
+                const response = await fetch('/member_info');
+                if (!response.ok) {
+                    throw new Error('데이터 가져오기 실패');
+                }
+                const supportPosts = await response.json();
+
+                supportPosts.forEach(function(post) {
+                    // 판매처 선택값(selectedStore)의 뒷부분 3글자를 추출
+                    var selectedStoreSuffix = selectedStore.slice(-3);
+
+                    // 판매자의 권한(post.권한)의 뒷부분 3글자를 추출
+                    var postSuffix = post.권한.slice(-3);
+
+                    if (selectedStoreSuffix === postSuffix) {
+                        var option = document.createElement('option');
+                        option.value = post.맴버;
+                        option.textContent = post.맴버;
+                        staffSelect.appendChild(option);
+                    }
+                });
+            } catch (error) {
+                console.error(error);
+            }
+        });
+
+    //구매일자 이벤트 함수
+    document.addEventListener("DOMContentLoaded", function() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth() + 1;
+        const date = now.getDate();
+        const formattedDate = `${year}년 ${month}월 ${date}일`;
+        const elements = document.querySelectorAll('.new_data');
+        elements.forEach(element => {
+            element.textContent = formattedDate;
+        });
+    });
+    //수량증감감소
+    function increaseValue(inputElement) {
+    let value = parseInt(inputElement.value, 10);
+    value = isNaN(value) ? 0 : value;
+    value++;
+    inputElement.value = value;
+
+    const row = $(inputElement).closest('tr');
+        updateItemPrice(row);
+        updateTotalPrice();
+    }
+    function decreaseValue(inputElement) {
+        let value = parseInt(inputElement.value, 10);
+        value = isNaN(value) ? 0 : value;
+        if(value > 1) value--;
+        inputElement.value = value;
+
+        const row = $(inputElement).closest('tr');
+        updateItemPrice(row);
+        updateTotalPrice();
+    }
+    ///단가 증량 함수 
+    function updateItemPrice(row) {
+        const pricePerItem = parseInt(row.find('td:nth-child(2) select option:selected').data('price') || 0);
+        const quantity = parseInt(row.find('.counter').val());
+        const discountOption = row.find('td:nth-child(6) select option:selected').text();
+        let discountRate = 0;
+
+        switch(discountOption) {
+            case "3%":
+                discountRate = 0.03;
+                break;                     
+            case "5%":
+                discountRate = 0.05;
+                break;              
+            case "10%":
+                discountRate = 0.10;
+                break;
+            case "15%":
+                discountRate = 0.15;
+                break;
+            case "20%":
+                discountRate = 0.20;
+                break;
+                case "25%":
+                discountRate = 0.25;
+                break;                   
+        }
+        const totalCostForItem = pricePerItem * quantity * (1 - discountRate);
+        const formattedCost = totalCostForItem.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        row.find('td:nth-child(7) input').val(formattedCost);
+    }
+    function updateTotalPrice() {
+        let total = 0;
+        $('table tbody tr').each(function() {
+            const priceValue = $(this).find('td:nth-child(7) input').val() || "0";
+            const price = parseInt(priceValue.toString().replace(/,/g, ''));
+            const shippingCost = parseInt($(this).find('td:nth-child(5) select option:selected').data('shipping-cost') || 0);
+            total += (price + shippingCost);
+        });
+
+        const formattedTotal = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        $('#totalPrice').val(formattedTotal);
+    }
+
+    $('table tbody').on('change', 'select, input[type="number"]', function() {
+        const row = $(this).closest('tr');
+        updateItemPrice(row);
+        updateTotalPrice();
+    });
+
+
+
+    $(document).ready(function() {
+        //주소검색관련 플러그인
+        $("#postcodify_search_button").postcodifyPopUp();
+        // 상품 추가 기능
+        let productCounter = 1; 
+        $('#addProduct').on('click touchstart', function() {
+                productCounter++;
+                const newRow = `
+                <tr>
+                    <td>
+                        <select class="form-control " id="goodsName_${productCounter}"name="goodsName_${productCounter}">
+                            <option disabled selected class="default-option" >제품선택</option>
+                            <option value="더블">더블</option>  
+                            <option value="맥스">맥스</option>
+                            <option value="슬림">슬림</option>
+                            <option value="미디">미디</option>
+                            <option value="미니">미니</option>      
+                            <option value="팟">팟</option>      
+                            <option value="드롭">드롭</option>      
+                            <option value="라운저">라운저</option>      
+                            <option value="피라미드">피라미드</option>
+                            <option value="오토만">오토만</option>      
+                            <option value="허기보">허기보</option>      
+                            <option value="버블">버블</option>      
+                            <option value="허거">허거</option>
+                            <option value="모듀">모듀</option>
+                            <option value="서포트">서포트</option>
+                            <option value="롤 맥스">롤 맥스</option>
+                            <option value="롤 미니">롤 미니</option>
+                            <option value="카터필러 롤 맥스">카터필러 롤 맥스</option>
+                            <option value="카터필러 롤 미디">카터필러 롤 미디</option>
+                            <option value="롤 메이트">롤 메이트</option>
+                            <option value="캐릭터인형">캐릭터인형</option>
+                            <option value="액세서리">액세서리</option>
+                            <option value="아로마테라피">아로마테라피</option>
+                            <option value="쿠션">쿠션</option>
+                            <option value="러그">러그</option>
+                            <option value="펫">펫</option>
+                        </select>
+                    </td>
+           
+                    <td>
+                        <select class="form-control color_select_bar" id="goodsBiz_${productCounter}"name="goodsBiz_${productCounter}">
+                            <option disabled selected class="default-option" >비즈선택</option>
+
+                            <option data-price="389000" class="max biz_name" value="맥스 스탠다드">맥스 스탠다드</option> 
+                            <option data-price="539000" class="max biz_name" value="맥스 프리미엄">맥스 프리미엄</option>
+                            <option data-price="689000" class="max biz_name" value="맥스 프리미엄 플러스">맥스 프리미엄 플러스</option>
+                            <option data-price="419000" class="max biz_name" value="줄라 맥스">줄라 맥스</option>
+                            <option data-price="569000" class="max biz_name" value="줄라 맥스 프리미엄">줄라 맥스 프리미엄</option>
+                            <option data-price="719000" class="max biz_name" value="줄라 맥스 프리미엄 플러스">줄라 맥스 프리미엄 플러스</option>
+                            <option data-price="429000" class="max biz_name" value="럭스 맥스">럭스 맥스</option>
+                            <option data-price="579000" class="max biz_name" value="럭스 맥스 프리미엄">럭스 맥스 프리미엄</option>
+                            <option data-price="729000" class="max biz_name" value="럭스 맥스 프리미엄 플러스">럭스 맥스 프리미엄 플러스</option>
+                            <option data-price="419000" class="max biz_name" value="믹스 맥스">믹스 맥스</option> 
+                            <option data-price="569000" class="max biz_name" value="믹스 맥스 프리미엄">믹스 맥스 프리미엄</option> 
+                            <option data-price="719000" class="max biz_name" value="믹스 맥스 프리미엄 플러스">믹스 맥스 프리미엄 플러스</option> 
+                            <option data-price="429000" class="max biz_name" value="맥스 스타워즈">맥스 스타워즈</option> 
+                            <option data-price="579000" class="max biz_name" value="맥스 스타워즈 프리미엄">맥스 스타워즈 프리미엄</option> 
+                            <option data-price="729000" class="max biz_name" value="맥스 스타워즈 프리미엄 플러스">맥스 스타워즈 프리미엄 플러스</option> 
+
+
+                            <option class="biz_name double" data-price="769000" value="더블 스탠다드">더블 스탠다드</option> 
+                            <option class="biz_name double" data-price="1069000" value="더블 프리미엄">더블 프리미엄</option>
+                            <option class="biz_name double" data-price="1369000" value="더블 프리미엄 플러스">더블 프리미엄 플러스</option>
+
+                            <option class="biz_name prime" data-price="339000" value="프라임 스탠다드">프라임 스탠다드</option> 
+                            <option class="biz_name prime" data-price="489000" value="프라임 프리미엄">프라임 프리미엄</option>
+                            <option class="biz_name prime" data-price="639000" value="프라임 프리미엄 플러스">프라임 프리미엄 플러스</option>
+
+                            <option class="biz_name slim" data-price="319000" value="슬림 스탠다드">슬림 스탠다드</option> 
+                            <option class="biz_name slim" data-price="439000" value="슬림 프리미엄">슬림 프리미엄</option>
+                            <option class="biz_name slim" data-price="559000" value="슬림 프리미엄 플러스">슬림 프리미엄 플러스</option>
+                            <option class="biz_name slim" data-price="349000" value="줄라 슬림">줄라 슬림</option>
+                            <option class="biz_name slim" data-price="469000" value="줄라 슬림 프리미엄">줄라 슬림 프리미엄</option>
+                            <option class="biz_name slim" data-price="589000" value="줄라 슬림 프리미엄 플러스">줄라 슬림 프리미엄 플러스</option>
+                            <option class="biz_name slim" data-price="359000" value="럭스 슬림">럭스 슬림</option>
+                            <option class="biz_name slim" data-price="479000" value="럭스 슬림 프리미엄">럭스 슬림 프리미엄</option>
+                            <option class="biz_name slim" data-price="599000" value="럭스 슬림 프리미엄 플러스">럭스 슬림 프리미엄 플러스</option>
+                            <option class="biz_name slim" data-price="349000" value="믹스 슬림">믹스 슬림</option> 
+                            <option class="biz_name slim" data-price="469000" value="믹스 슬림 프리미엄">믹스 슬림 프리미엄</option> 
+                            <option class="biz_name slim" data-price="589000" value="믹스 슬림 프리미엄 플러스">믹스 슬림 프리미엄 플러스</option> 
+                            <option class="biz_name slim" data-price="349000" value="카카오프렌즈 슬림">카카오프렌즈 슬림</option> 
+                            <option class="biz_name slim" data-price="469000" value="카카오프렌즈 슬림 프리미엄">카카오프렌즈 슬림 프리미엄</option> 
+                            <option class="biz_name slim" data-price="589000" value="카카오프렌즈 슬림 프리미엄 플러스">카카오프렌즈 슬림 프리미엄 플러스</option>   
+
+                            <option class="biz_name midi" data-price="329000" value="미디 스탠다드">미디 스탠다드</option> 
+                            <option class="biz_name midi" data-price="479000" value="미디 프리미엄">미디 프리미엄</option>
+                            <option class="biz_name midi" data-price="629000" value="미디 프리미엄 플러스">미디 프리미엄 플러스</option>
+                            <option class="biz_name midi" data-price="359000" value="줄라 미디">줄라 미디</option>
+                            <option class="biz_name midi" data-price="509000" value="줄라 미디 프리미엄">줄라 미디 프리미엄</option>
+                            <option class="biz_name midi" data-price="659000" value="줄라 미디 프리미엄 플러스">줄라 미디 프리미엄 플러스</option>  
+  
+                            <option class="biz_name mini" data-price="199000" value="미니 스탠다드">미니 스탠다드</option> 
+                            <option class="biz_name mini" data-price="319000" value="미니 프리미엄">미니 프리미엄</option>
+                            <option class="biz_name mini" data-price="439000" value="미니 프리미엄 플러스">미니 프리미엄 플러스</option>   
+                            <option class="biz_name mini" data-price="229000" value="줄라 미니">줄라 미니</option>
+                            <option class="biz_name mini" data-price="349000" value="줄라 미니 프리미엄">줄라 미니 프리미엄</option>
+                            <option class="biz_name mini" data-price="469000" value="줄라 미니 프리미엄 플러스">줄라 미니 프리미엄 플러스</option>
+
+                            <option class="biz_name pod" data-price="329000" value="팟 스탠다드">팟 스탠다드</option> 
+                            <option class="biz_name pod" data-price="479000" value="팟 프리미엄">팟 프리미엄</option>
+                            <option class="biz_name pod" data-price="629000" value="팟 프리미엄 플러스">팟 프리미엄 플러스</option>
+                            <option class="biz_name pod" data-price="359000" value="줄라 팟">줄라 팟</option>
+                            <option class="biz_name pod" data-price="509000" value="줄라 팟 프리미엄">줄라 팟 프리미엄</option>
+                            <option class="biz_name pod" data-price="659000" value="줄라 팟 프리미엄 플러스">줄라 팟 프리미엄 플러스</option>   
+
+                            <option class="biz_name drop" data-price="299000" value="드롭 스탠다드">드롭 스탠다드</option> 
+                            <option class="biz_name drop" data-price="449000" value="드롭 프리미엄">드롭 프리미엄</option>
+                            <option class="biz_name drop" data-price="599000" value="드롭 프리미엄 플러스">드롭 프리미엄 플러스</option>  
+                            <option class="biz_name drop" data-price="329000" value="줄라 드롭">줄라 드롭</option>
+                            <option class="biz_name drop" data-price="479000" value="줄라 드롭 프리미엄">줄라 드롭 프리미엄</option>
+                            <option class="biz_name drop" data-price="629000" value="줄라 드롭 프리미엄 플러스">줄라 드롭 프리미엄 플러스</option>  
+                            <option class="biz_name drop" data-price="329000" value="믹스 드롭">믹스 드롭</option>
+                            <option class="biz_name drop" data-price="479000" value="믹스 드롭 프리미엄">믹스 드롭 프리미엄</option>
+                            <option class="biz_name drop" data-price="629000" value="믹스 드롭 프리미엄 플러스">믹스 드롭 프리미엄 플러스</option>                             
+                            <option class="biz_name drop" data-price="329000" value="카카오프렌즈 드롭">카카오프렌즈 드롭</option> 
+                            <option class="biz_name drop" data-price="479000" value="카카오프렌즈 드롭 프리미엄">카카오프렌즈 드롭 프리미엄</option> 
+                            <option class="biz_name drop" data-price="629000" value="카카오프렌즈 드롭 프리미엄 플러스">카카오프렌즈 드롭 프리미엄 플러스</option>  
+                            <option class="biz_name drop" data-price="339000" value="스타워즈 드롭">스타워즈 드롭</option> 
+                            <option class="biz_name drop" data-price="489000" value="스타워즈 드롭 프리미엄">스타워즈 드롭 프리미엄</option> 
+                            <option class="biz_name drop" data-price="639000" value="스타워즈 드롭 프리미엄 플러스">스타워즈 드롭 프리미엄 플러스</option>  
+
+                            <option class="biz_name lounger" data-price="269000" value="라운저 스탠다드">라운저 스탠다드</option>
+                            <option class="biz_name lounger" data-price="389000" value="라운저 프리미엄">라운저 프리미엄</option>   
+                            <option class="biz_name lounger" data-price="509000" value="라운저 프리미엄 플러스">라운저 프리미엄 플러스</option>   
+                            <option class="biz_name lounger" data-price="299000" value="줄라 라운저">줄라 라운저</option>
+                            <option class="biz_name lounger" data-price="419000" value="줄라 라운저 프리미엄">줄라 라운저 프리미엄</option>
+                            <option class="biz_name lounger" data-price="539000" value="줄라 라운저 프리미엄 플러스">줄라 라운저 프리미엄 플러스</option>    
+                            <option class="biz_name lounger" data-price="309000" value="럭스 라운저">럭스 라운저</option>
+                            <option class="biz_name lounger" data-price="429000" value="럭스 라운저 프리미엄">럭스 라운저 프리미엄</option>
+                            <option class="biz_name lounger" data-price="549000" value="럭스 라운저 프리미엄 플러스">럭스 라운저 프리미엄 플러스</option>    
+                            <option class="biz_name lounger" data-price="309000" value="스타워즈 라운저">스타워즈 라운저</option> 
+                            <option class="biz_name lounger" data-price="429000" value="스타워즈 라운저 프리미엄">스타워즈 라운저 프리미엄</option> 
+                            <option class="biz_name lounger" data-price="549000" value="스타워즈 라운저 프리미엄 플러스">스타워즈 라운저 프리미엄 플러스</option>   
+                            <option class="biz_name lounger" data-price="299000" value="믹스 라운저">믹스 라운저</option> 
+                            <option class="biz_name lounger" data-price="419000" value="믹스 라운저 프리미엄">믹스 라운저 프리미엄</option> 
+                            <option class="biz_name lounger" data-price="539000" value="믹스 라운저 프리미엄 플러스">믹스 라운저 프리미엄 플러스</option>   
+
+                            <option class="biz_name pyramid" data-price="169000"  value="피라미드 스탠다드">피라미드 스탠다드</option>
+                            <option class="biz_name pyramid" data-price="269000"  value="피라미드 프리미엄">피라미드 프리미엄</option>   
+                            <option class="biz_name pyramid" data-price="369000"  value="피라미드 프리미엄 플러스">피라미드 프리미엄 플러스</option>  
+                            <option class="biz_name pyramid" data-price="199000" value="줄라 피라미드">줄라 피라미드</option>
+                            <option class="biz_name pyramid" data-price="299000" value="줄라 피라미드 프리미엄">줄라 피라미드 프리미엄</option>
+                            <option class="biz_name pyramid" data-price="399000" value="줄라 피라미드 프리미엄 플러스">줄라 피라미드 프리미엄 플러스</option>    
+                            <option class="biz_name pyramid" data-price="199000" value="카카오프렌즈 피라미드">카카오프렌즈 피라미드</option>
+                            <option class="biz_name pyramid" data-price="299000" value="카카오프렌즈 피라미드 프리미엄">카카오프렌즈 피라미드 프리미엄</option>
+                            <option class="biz_name pyramid" data-price="399000" value="카카오프렌즈 피라미드 프리미엄 플러스">카카오프렌즈 피라미드 프리미엄 플러스</option>  
+
+                            <option class="biz_name hugibo" data-price="259000" value="허기보">허기보 </option>
+                            <option class="biz_name hugibo" data-price="339000" value="허기보 프리미엄">허기보 프리미엄</option>
+                            <option class="biz_name hugibo" data-price="419000" value="허기보 프리미엄 플러스">허기보 프리미엄 플러스</option>  
+
+                            <option class="biz_name bubble" data-price="309000"  value="디즈니 미니 버블">디즈니 미니 버블</option>
+                            <option class="biz_name bubble" data-price="389000"  value="디즈니 미니 버블 프리미엄">디즈니 미니 버블 프리미엄</option>
+                            <option class="biz_name bubble" data-price="549000"  value="디즈니 미니 버블 프리미엄 플러스">디즈니 미니 버블 프리미엄 플러스</option>
+
+                            <option class="biz_name bubble" data-price="309000" value="디즈니 미키 버블">디즈니 미키 버블</option>
+                            <option class="biz_name bubble" data-price="389000" value="디즈니 미키 버블 프리미엄">디즈니 미키 버블 프리미엄</option>
+                            <option class="biz_name bubble" data-price="549000" value="디즈니 미키 버블 프리미엄 플러스">디즈니 미키 버블 프리미엄 플러스</option>
+
+                            <option class="biz_name hugger" data-price="309000" value="토이스토리 우디 허거">토이스토리 우디 허거</option>
+                            <option class="biz_name hugger" data-price="429000" value="토이스토리 우디 허거 프리미엄">토이스토리 우디 허거 프리미엄</option>
+                            <option class="biz_name hugger" data-price="549000" value="토이스토리 우디 허거 프리미엄 플러스">토이스토리 우디 허거 프리미엄 플러스</option>
+
+                            <option class="biz_name hugger" data-price="309000" value="토이스토리 버즈 허거">토이스토리 버즈 허거</option>
+                            <option class="biz_name hugger" data-price="429000" value="토이스토리 버즈 허거 프리미엄">토이스토리 버즈 허거 프리미엄</option>
+                            <option class="biz_name hugger" data-price="549000" value="토이스토리 버즈 허거 프리미엄 플러스">토이스토리 버즈 허거 프리미엄 플러스</option>
+
+                            <option class="biz_name hugger" data-price="309000" value="토이스토리 알린 허거">토이스토리 알린 허거</option>
+                            <option class="biz_name hugger" data-price="429000" value="토이스토리 알린 허거 프리미엄">토이스토리 알린 허거 프리미엄</option>
+                            <option class="biz_name hugger" data-price="549000" value="토이스토리 알린 허거 프리미엄 플러스">토이스토리 알린 허거 프리미엄 플러스</option>
+
+                            <option class="biz_name hugger" data-price="309000" value="디즈니 미키 허거">디즈니 미키 허거</option>
+                            <option class="biz_name hugger" data-price="429000" value="디즈니 미키 허거 프리미엄">디즈니 미키 허거 프리미엄</option>
+                            <option class="biz_name hugger" data-price="549000" value="디즈니 미키 허거 프리미엄 플러스">디즈니 미키 허거 프리미엄 플러스</option>
+
+                            <option class="biz_name hugger" data-price="309000" value="디즈니 미니 허거">디즈니 미니 허거</option>
+                            <option class="biz_name hugger" data-price="429000" value="디즈니 미니 허거 프리미엄">디즈니 미니 허거 프리미엄</option>
+                            <option class="biz_name hugger" data-price="549000" value="디즈니 미니 허거 프리미엄 플러스">디즈니 미니 허거 프리미엄 플러스</option>
+
+                            <option class="biz_name hugger" data-price="309000" value="디즈니 도날드 허거">디즈니 도날드 허거</option>
+                            <option class="biz_name hugger" data-price="429000" value="디즈니 도날드 허거 프리미엄">디즈니 도날드 허거 프리미엄</option>
+                            <option class="biz_name hugger" data-price="549000" value="디즈니 도날드 허거 프리미엄 플러스">디즈니 도날드 허거 프리미엄 플러스</option>
+
+                            <option class="biz_name modju" data-price="649000" value="모듀 소파 코너">모듀 소파 코너</option>
+                            <option class="biz_name modju" data-price="589000" value="모듀 소파 탑">모듀 소파 탑</option>
+                            <option class="biz_name modju" data-price="419000" value="모듀 소파 베이스">모듀 소파 베이스</option>
+                            <option class="biz_name modju" data-price="54000" value="모듀 스퀘어 필로우">모듀 스퀘어 필로우</option>
+                            <option class="biz_name modju" data-price="54000" value="모듀 롤 닷">모듀 롤 닷</option>
+
+
+                            <option class="biz_name support" data-price="179000" value="서포트 스탠다드">서포트 스탠다드</option>
+                            <option class="biz_name support" data-price="279000" value="서포트 프리미엄">서포트 프리미엄</option>
+                            <option class="biz_name support" data-price="379000" value="서포트 프리미엄 플러스">서포트 프리미엄 플러스</option>
+
+                            <option class="biz_name support" data-price="209000" value="줄라 서포트">줄라 서포트</option>
+                            <option class="biz_name support" data-price="309000" value="줄라 서포트 프리미엄">줄라 서포트 프리미엄</option>
+                            <option class="biz_name support" data-price="409000" value="줄라 서포트 프리미엄 플러스">줄라 서포트 프리미엄 플러스</option>
+
+                            <option class="biz_name support" data-price="219000" value="럭스 서포트">럭스 서포트</option>
+                            <option class="biz_name support" data-price="319000" value="럭스 서포트 프리미엄">럭스 서포트 프리미엄</option>
+                            <option class="biz_name support" data-price="419000" value="럭스 서포트 프리미엄 플러스">럭스 서포트 프리미엄 플러스</option>   
+
+                            <option class="biz_name support" data-price="209000" value="카카오프렌즈 서포트">카카오프렌즈 서포트</option>
+                            <option class="biz_name support" data-price="309000" value="카카오프렌즈 서포트 프리미엄">카카오프렌즈 서포트 프리미엄</option>
+                            <option class="biz_name support" data-price="409000" value="카카오프렌즈 서포트 프리미엄 플러스">카카오프렌즈 서포트 프리미엄 플러스</option>  
+
+                            <option class="biz_name support" data-price="219000" value="스타워즈 서포트">스타워즈 서포트</option>
+                            <option class="biz_name support" data-price="319000" value="스타워즈 서포트 프리미엄">스타워즈 서포트 프리미엄</option>
+                            <option class="biz_name support" data-price="419000" value="스타워즈 서포트 프리미엄 플러스">스타워즈 서포트 프리미엄 플러스</option>                          
+
+                            <option class="biz_name rollmax" data-price="199000" value="롤 맥스">롤 맥스</option>
+                            <option class="biz_name rollmax" data-price="299000" value="롤 맥스 프리미엄">롤 맥스 프리미엄</option>
+                            <option class="biz_name rollmax" data-price="399000" value="롤 맥스 프리미엄 플러스">롤 맥스 프리미엄 플러스</option>  
+
+                            <option class="biz_name rollmax" data-price="229000" value="믹스 롤 맥스">믹스 롤 맥스 </option>
+                            <option class="biz_name rollmax" data-price="329000" value="믹스 롤 맥스 프리미엄">믹스 롤 맥스 프리미엄</option>
+                            <option class="biz_name rollmax" data-price="429000" value="믹스 롤 맥스 프리미엄 플러스">믹스 롤 맥스 프리미엄 플러스</option>  
+
+                            <option class="biz_name rollmax" data-price="239000" value="럭스 롤 맥스">럭스 롤 맥스</option>
+                            <option class="biz_name rollmax" data-price="339000" value="럭스 롤 맥스 프리미엄">럭스 롤 맥스 프리미엄</option>
+                            <option class="biz_name rollmax" data-price="439000" value="럭스 롤 맥스 프리미엄 플러스">럭스 롤 맥스 프리미엄 플러스</option>  
+                            
+                            <option class="biz_name rollmini" data-price="84000" value="롤 미니">롤 미니</option>
+                            <option class="biz_name rollmini" data-price="154000"  value="롤 미니 프리미엄">롤 미니 프리미엄</option>
+
+                            <option class="biz_name caterpillarRollmax" data-price="189000" value="카터필러 롤 맥스">카터필러 롤 맥스</option>
+                            <option class="biz_name caterpillarRollmax" data-price="289000" value="카터필러 롤 맥스 프리미엄">카터필러 롤 맥스 프리미엄</option>
+                            <option class="biz_name caterpillarRollmax" data-price="389000" value="카터필러 롤 맥스 프리미엄 플러스">카터필러 롤 맥스 프리미엄 플러스</option>     
+
+                            <option class="biz_name caterpillarRollmidi" data-price="124000" value="카터필러 롤 미디">카터필러 롤 미디</option>
+                            <option class="biz_name caterpillarRollmidi" data-price="204000" value="카터필러 롤 미디 프리미엄">카터필러 롤 미디 프리미엄</option>
+
+                            <option class="biz_name caterpillarRollmidi" data-price="144000" value="카카오프렌즈 카터필러 롤 미디">카카오프렌즈 카터필러 롤 미디</option>
+                            <option class="biz_name caterpillarRollmidi" data-price="224000" value="카카오프렌즈 카터필러 롤 미디 프리미엄">카카오프렌즈 카터필러 롤 미디 프리미엄</option>
+
+
+                            <option class="biz_name rollmate" data-price="94000" value="앨리게이터 롤 메이트">앨리게이터 롤 메이트</option>
+                            <option class="biz_name rollmate" data-price="94000" value="팍스 롤 메이트">팍스 롤 메이트</option>
+                            <option class="biz_name rollmate" data-price="94000" value="도그 롤 메이트">도그 롤 메이트</option>
+                            <option class="biz_name rollmate" data-price="94000" value="유니콘 롤 메이트">유니콘 롤 메이트</option>
+                            <option class="biz_name rollmate" data-price="94000" value="판다 롤 메이트">판다 롤 메이트</option>
+    
+
+                            <!--캐릭터인형-->
+                            <option class="biz_name mate" data-price="94000" value="판다 롤 메이트">판다 롤 메이트</option>                                
+                            <option class="biz_name mate" data-price="78800" value="팍스 메가 메이트,페스터스">팍스 메가 메이트,페스터스</option>
+                            <option class="biz_name mate" data-price="78800" value="유니콘 메가 메이트,유니크">유니콘 메가 메이트,유니크</option>                                       
+                            <option class="biz_name mate" data-price="58800" value="스타워즈 다스 베이더 메이트">스타워즈 다스 베이더 메이트</option>
+                            <option class="biz_name mate" data-price="58800" value="스타워즈 더 차일드 그로구 메이트">스타워즈 더 차일드 그로구 메이트</option>
+                            <option class="biz_name mate" data-price="58800" value="스타워즈 츄바카 메이트">스타워즈 츄바카 메이트</option>
+                            <option class="biz_name mate" data-price="58800" value="스타워즈 스톰트루퍼 메이트">스타워즈 스톰트루퍼 메이트</option>
+                            <option class="biz_name mate" data-price="58800" value="스타워즈 포그 메이트">스타워즈 포그 메이트</option>
+                            <option class="biz_name mate" data-price="58800" value="스타워즈 요다 메이트">스타워즈 요다 메이트</option>
+                            <option class="biz_name mate" data-price="58800" value="스타워즈 이웍 메이트">스타워즈 이웍 메이트</option>
+                            <option class="biz_name mate" data-price="58800" value="스타워즈 R2-D2 메이트">스타워즈 R2-D2 메이트</option>
+                            <option class="biz_name mate" data-price="58800" value="스타워즈 BB-8 메이트">스타워즈 BB-8 메이트</option>    
+                            <option class="biz_name mate" data-price="58800" value="스타워즈 만달로리안 메이트">스타워즈 만달로리안 메이트</option>                                                
+                            <option class="biz_name mate" data-price="58800" value="디즈니 미니 메이트">디즈니 미니 메이트</option>
+                            <option class="biz_name mate" data-price="58800" value="디즈니 도날드 메이트">디즈니 도날드 메이트</option>
+                            <option class="biz_name mate" data-price="58800" value="디즈니 미키 메이트 레인보우">디즈니 미키 메이트 레인보우</option>
+                            <option class="biz_name mate" data-price="38800" value="샤크 메이트,지그프리트">샤크 메이트,지그프리트</option>
+                            <option class="biz_name mate" data-price="38800" value="지라프 메이트,조젯">지라프 메이트,조젯</option>
+                            <option class="biz_name mate" data-price="38800" value="헤지호그 메이트,휴고">헤지호그 메이트,휴고</option>
+                            <option class="biz_name mate" data-price="38800" value="코알라 메이트,케빈">코알라 메이트,케빈</option>
+                            <option class="biz_name mate" data-price="38800" value="펭귄 메이트,펄">펭귄 메이트,펄</option>
+                            <option class="biz_name mate" data-price="38800" value="라쿤 메이트,로미">라쿤 메이트,로미</option>
+                            <option class="biz_name mate" data-price="38800" value="판다 메이트,셸비">판다 메이트,셸비</option>
+                            <option class="biz_name mate" data-price="38800" value="멍키 메이트,모리슨">멍키 메이트,모리슨</option>
+                            <option class="biz_name mate" data-price="38800" value="아울 메이트,오파">아울 메이트,오파</option>   
+                            <option class="biz_name mate" data-price="38800" value="퍼블 캣 메이트,칼리스타">퍼블 캣 메이트,칼리스타</option>   
+
+
+                             <!--액세서리-->
+                             <option class="biz_name acc" data-price="159000" value="요가보">요가보</option>      
+                             <option class="biz_name acc" data-price="149000" value="요기박스 그랑데">요기박스 그랑데</option>                                                 
+                             <option class="biz_name acc" data-price="119000" value="코지보">코지보</option>    
+                             <option class="biz_name acc" data-price="47800" value="코지보 트래블">코지보 트래블</option>                                                    
+                             <option class="biz_name acc" data-price="71800" value="트레이보 엑스">트레이보 엑스</option>
+                             <option class="biz_name acc" data-price="69800" value="요기박스 큐브 2.0">요기박스 큐브 2.0</option>                    
+                             <option class="biz_name acc" data-price="42800" value="타블로 엑스">타블로 엑스</option>
+                             <option class="biz_name acc" data-price="37800" value="타블로">타블로</option>  
+                             <option class="biz_name acc" data-price="32800" value="캔버스 쿠션 스퀘어">캔버스 쿠션 스퀘어</option>  
+                             <option class="biz_name acc" data-price="24800" value="월 아트">월 아트</option>     
+                             <option class="biz_name acc" data-price="19800" value="볼 맥스">볼 맥스</option>                                                                                                                                      
+                             <option class="biz_name acc" data-price="18800" value="스타워즈 스퀴지보">스타워즈 스퀴지보</option>   
+                             <option class="biz_name acc" data-price="18800" value="디즈니 스퀴지보">디즈니 스퀴지보</option>   
+                             <option class="biz_name acc" data-price="18800" value="토이스토리 스퀴지보">토이스토리 스퀴지보</option>                                                                  
+                             <option class="biz_name acc" data-price="15800" value="스퀴지보 애니멀">스퀴지보 애니멀</option>
+                             <option class="biz_name acc" data-price="15800" value="스퀴지보 하트">스퀴지보 하트</option>                            
+                             <option class="biz_name acc" data-price="12800" value="솔리드 스퀴지보">솔리드 스퀴지보</option>
+                             <option class="biz_name acc" data-price="12800" value="캔버스 쿠션 미니">캔버스 쿠션 미니</option>
+                             <option class="biz_name acc" data-price="12800" value="볼 미니">볼 미니</option>                          
+                             <option class="biz_name acc" data-price="9800" value="샤이니보">샤이니보</option>
+                             <option class="biz_name acc" data-price="4800" value="패브릭 물감">패브릭 물감</option>
+
+                              <!--아로마테라피-->
+                              <option class="biz_name aroma" data-price="19800" value="사이너스 마이너스 2.0 클레이">사이너스 마이너스 2.0 클레이</option>
+                              <option class="biz_name aroma" data-price="39800" value="숄더 원더 클레이">숄더 원더 클레이</option>
+                              <option class="biz_name aroma" data-price="39800" value="백 마이스터 클레이">백 마이스터 클레이</option>
+                              <option class="biz_name aroma" data-price="29800" value="키보드 쿠션 2.0 클레이">키보드 쿠션 2.0 클레이</option>
+                              <option class="biz_name aroma" data-price="39800" value="바디 허그 2.0 클레이">바디 허그 2.0 클레이</option>
+                              <option class="biz_name aroma" data-price="24800" value="보 도우">보 도우</option>
+                              <option class="biz_name aroma" data-price="39800" value="아로마 슬리퍼">아로마 슬리퍼</option>
+                              <!--쿠션-->
+                            <option class="biz_name cushion" data-price="47800" value="냅 엑스">냅 엑스</option>
+                            <option class="biz_name cushion" data-price="49800" value="라운드 필로우">라운드 필로우</option>
+                            <option class="biz_name cushion" data-price="42800" value="지퍼롤">지퍼롤</option>
+                            <option class="biz_name cushion" data-price="44800" value="하트 필로우">하트 필로우</option>
+                            <option class="biz_name cushion" data-price="119000" value="메가 문 필로우">메가 문 필로우</option>
+                                <!--러그-->
+                            <option class="biz_name rug" data-price="184000" value="요기보 콜렉션 러그 스퀘어 라지">요기보 콜렉션 러그 스퀘어 라지</option>
+                            <option class="biz_name rug" data-price="144000" value="요기보 콜렉션 러그 라운드">요기보 콜렉션 러그 라운드</option>
+                            <option class="biz_name rug" data-price="104000" value="요기보 콜렉션 러그 스퀘어 스몰">요기보 콜렉션 러그 스퀘어 스몰</option>
+                            <!--펫-->
+                            <option class="biz_name dog" data-price="129000" value="도기보 미디">도기보 미디</option>
+
+                        </select>
+                    </td>    
+                    <td>
+                        <select class="form-control" id="goodsColor_${productCounter}"name="goodsColor_${productCounter}">
+                            <option disabled selected class="default-option" >색상선택</option>                          
+                            <option class="s_color_chip"  value="블라썸핑크">블라썸핑크</option>
+                            <option class="s_color_chip"  value="리빙코랄">리빙코랄</option>
+                            <option class="s_color_chip"  value="아보카도그린">아보카도그린</option>
+                            <option class="s_color_chip"  value="프레시민트">프레시민트</option>
+                            <option class="s_color_chip"  value="파스텔블루">파스텔블루</option>
+                            <option class="s_color_chip"  value="라벤더퍼플">라벤더퍼플</option>
+                            <option class="s_color_chip"  value="체리레드">체리레드</option>
+                            <option class="s_color_chip"  value="로즈핑크">로즈핑크</option>
+                            <option class="s_color_chip"  value="와인버건디">와인버건디</option>
+                            <option class="s_color_chip"  value="스위트오렌지">스위트오렌지</option>
+                            <option class="s_color_chip"  value="브라이트옐로">브라이트옐로</option>
+                            <option class="s_color_chip"  value="올리브그린">올리브그린</option>
+                            <option class="s_color_chip"  value="아쿠아블루">아쿠아블루</option>
+                            <option class="s_color_chip"  value="네이비블루">네이비블루</option>
+                            <option class="s_color_chip"  value="초코브라운">초코브라운</option>
+                            <option class="s_color_chip"  value="라이트그레이">라이트그레이</option>
+                            <option class="s_color_chip"  value="다크그레이">다크그레이</option>
+                            <option class="s_color_chip"  value="브라이트퍼플">브라이트퍼플</option>
+                            <option class="s_color_chip"  value="딥퍼플">딥퍼플</option>
+                            <option class="s_color_chip"  value="레인보우">레인보우</option>
+                            <option class="s_color_chip"  value="뉴트럴">뉴트럴</option>
+                            <option class="s_color_chip"  value="라이언">라이언</option>
+                            <option class="s_color_chip"  value="어피치">어피치</option>
+                            <option class="s_color_chip"  value="제국군">제국군</option>
+                            <option class="s_color_chip"  value="반란군">반란군</option>
+                            <option class="s_color_chip"  value="스톤">스톤</option>
+                            <option class="s_color_chip"  value="스카이">스카이</option>
+                            <option class="s_color_chip"  value="그라스">그라스</option>
+                            <option class="s_color_chip"  value="시트러스">시트러스</option>
+                            <option class="s_color_chip"  value="오션">오션</option>
+                            <option class="s_color_chip"  value="마린">마린</option>
+                            <option class="s_color_chip"  value="오닉스">오닉스</option>
+                            <option class="s_color_chip"  value="스노우">스노우</option>
+                            <option class="s_color_chip"  value="블랙펄">블랙펄</option>
+                        </select>
+                    </td>
+                    <td>
+                        <ul class="counter_number form-control">
+                            <li onclick="decreaseValue(document.getElementById('goodsCounter_${productCounter}'))" style="cursor: pointer;">-</li>
+                            <li><input type="text" class=" counter"id="goodsCounter_${productCounter}" name="goodsCounter_${productCounter}"value="1"></li>
+                            <li onclick="increaseValue(document.getElementById('goodsCounter_${productCounter}'))" style="cursor: pointer;">+</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <select class="form-control" id="goodsDelivery_${productCounter}" name="goodsDelivery_${productCounter}">>
+                            <option data-shipping-cost="0">무료배송</option>
+                            <option data-shipping-cost="5000">5,000원</option>
+                            <option data-shipping-cost="7000">7,000원</option>
+                            <option data-shipping-cost="10000">10,000원</option>
+                            <option data-shipping-cost="14000">14,000원</option>
+                            <option data-shipping-cost="15000">15,000원</option>
+                            <option data-shipping-cost="20000">20,000원</option>
+                            <option data-shipping-cost="30000">30,000원</option>
+                            <option data-shipping-cost="40000">40,000원</option>
+                            <option data-shipping-cost="60000">60,000원</option>
+                            <option data-shipping-cost="80000">80,000원</option>
+                            <option data-shipping-cost="160000">160,000원</option>
+                        </select>
+                    </td>
+                    <td>
+                            <select class="form-control" id="goodsDiscount_${productCounter}" name="goodsDiscount_${productCounter}">
+                                <option >0%</option>
+                                <option >3%</option>
+                                <option>5%</option>
+                                <option >10%</option>
+                                <option >15%</option>
+                                <option >20%</option>
+                                <option >25%</option>
+                            </select>
+                    </td>     
+                    
+                    
+
+                    <td><input type="text" class="form-control" id="goodsPrice_${productCounter}" name="goodsPrice_${productCounter}" readonly placeholder="상품금액"></td>
+                    <td class="remove_addGoods">X</td>
+                </tr>
+                `;
+                $('.table tbody').append(newRow);
+        });
+
+
+            //기본 상품들에 추가될 컬러칩들
+            const standardColor = [
+                '블라썸핑크',
+                '리빙코랄',
+                '아보카도그린',
+                '프레시민트',
+                '파스텔블루',
+                '라벤더퍼플',
+                '체리레드',
+                '로즈핑크',
+                '와인버건디',
+                '스위트오렌지',
+                '브라이트옐로',
+                '올리브그린',
+                '아쿠아블루',
+                '네이비블루',
+                '초코브라운',
+                '라이트그레이',
+                '다크그레이',
+                '브라이트퍼플',
+                '딥퍼플'
+            ];
+            const mixColor = [
+                '뉴트럴',
+                '레인보우',
+            ];
+            const kakaoColor = [
+                '라이언',
+                '어피치',
+            ];    
+            const starColor = [
+                '제국군',
+                '반란군',
+            ];  
+            const zoolaColor = [
+                '스톤',
+                '스카이',
+                '그라스',
+                '시트러스',
+                '오션',
+                '마린',
+                '오닉스',
+            ];     
+            const luxColor = [
+                '스노우',
+                '블랙펄',
+            ];  
+            const hugiColor = [
+                '로즈핑크',
+                '올리브그린',
+                '아쿠아블루',
+            ]          
+            const modjuColor = [
+                '아쿠아블루',
+                '올리브그린',
+                '라이트그레이',
+                '다크그레이',
+                '브레이트 퍼플',
+                '체리레드',
+            ];
+            const nille = [
+             
+            ];
+
+
+                const bizMax = {
+                    "맥스 스탠다드": '389000',
+                    "맥스 프리미엄": '539000',
+                    "맥스 프리미엄 플러스": '689000',
+                    "줄라 맥스": '419000',
+                    "줄라 맥스 프리미엄": '569000',
+                    "줄라 맥스 프리미엄 플러스": '719000',
+                    "럭스 맥스": '429000',
+                    "럭스 맥스 프리미엄": '579000',
+                    "럭스 맥스 프리미엄 플러스": '729000',
+                    "믹스 맥스": '419000',
+                    "믹스 맥스 프리미엄": '569000',
+                    "믹스 맥스 프리미엄 플러스": '719000',
+
+                    "맥스 스타워즈": '429000',
+                    "맥스 스타워즈 프리미엄": '579000',
+                    "맥스 스타워즈 프리미엄 플러스": '729000',
+                };
+                const bizDouble = {
+                    "더블 스탠다드": '769000',
+                    "더블 프리미엄": '1069000',
+                    "더블 프리미엄 플러스": '1369000',
+                };
+
+                const bizPrime = {
+                    "프라임 스탠다드": '339000',
+                    "프라임 프리미엄": '489000',
+                    "프라임 프리미엄 플러스": '639000',
+                };
+
+                const bizSlim = {
+                    "슬림 스탠다드":'319000',
+                    "슬림 프리미엄":'439000',
+                    "슬림 프리미엄 플러스":'559000',                   
+                    "줄라 슬림":'349000',
+                    "줄라 슬림 프리미엄":'469000',
+                    "슬림 슬림 프리미엄 플러스":'589000',
+                    "럭스 슬림":'359000',
+                    "럭스 슬림 프리미엄":'479000',
+                    "럭스 슬림 프리미엄 플러스":'599000',
+                    "믹스 슬림":'349000',
+                    "믹스 슬림 프리미엄":'469000',
+                    "믹스 슬림 프리미엄 플러스":'589000',
+                    "카카오프렌즈 슬림":'349000',
+                    "카카오프렌즈 슬림 프리미엄":'469000',
+                    "카카오프렌즈 슬림 프리미엄 플러스":'589000',
+                };
+
+                const bizMidi = {
+                    "미디 스탠다드":'329000',
+                    "미디 프리미엄":'479000',
+                    "미디 프리미엄 플러스":'629000',
+                    "줄라 미디":'359000',
+                    "줄라 미디 프리미엄":'509000',
+                    "줄라 미디 프리미엄 플러스":'659000',
+                };
+
+                const bizMini = {
+                    "미니 스탠다드":'199000',
+                    "미니 프리미엄":'319000',
+                    "미니 프리미엄 플러스":'439000',
+                    "줄라 미니":'229000',
+                    "줄라 미니 프리미엄":'349000',
+                    "줄라 미니 프리미엄 플러스":'469000',
+                };
+
+                const bizPod = {
+                    "팟 스탠다드":'329000',
+                    "팟 프리미엄":'479000',
+                    "팟 프리미엄 플러스":'629000',
+                    "줄라 팟":'359000',
+                    "줄라 팟 프리미엄":'509000',
+                    "줄라 팟 프리미엄 플러스":'659000',
+                };
+
+                const bizDrop = {
+                    "드롭 스탠다드":'299000',
+                    "드롭 프리미엄":'449000',
+                    "드롭 프리미엄 플러스":'599000',
+                    "줄라 드롭":'329000',
+                    "줄라 드롭 프리미엄":'479000',
+                    "줄라 드롭 프리미엄 플러스":'629000',
+                    "믹스 드롭":'329000',
+                    "믹스 드롭 프리미엄":'479000',
+                    "믹스 드롭 프리미엄 플러스":'629000',
+                    "카카오프렌즈 드롭":'329000',
+                    "카카오프렌즈 드롭 프리미엄":'479000',
+                    "카카오프렌즈 드롭 프리미엄 플러스":'629000',
+                    "스타워즈 드롭":'339000',
+                    "스타워즈 드롭 프리미엄":'489000',
+                    "스타워즈 드롭 프리미엄 플러스":'639000',
+                };
+
+                const bizLounger = {
+                    "라운저 스탠다드":'269000',
+                    "라운저 프리미엄":'389000',
+                    "라운저 프리미엄 플러스":'509000',
+                    "줄라 라운저":'299000',
+                    "줄라 라운저 프리미엄":'419000',
+                    "줄라 라운저 프리미엄 플러스":'539000',
+                    "럭스 라운저":'309000',
+                    "럭스 라운저 프리미엄":'429000',
+                    "럭스 라운저 프리미엄 플러스":'549000',
+                    "스타워즈 라운저":'309000',
+                    "스타워즈 라운저 프리미엄":'429000',
+                    "스타워즈 라운저 프리미엄 플러스":'549000',
+                    "믹스 라운저":'299000',
+                    "믹스 라운저 프리미엄":'419000',
+                    "믹스 라운저 프리미엄 플러스":'539000',
+                };
+
+                const bizPyramid = {
+                    "피라미드 스탠다드":'169000',
+                    "피라미드 프리미엄":'269000',
+                    "피라미드 프리미엄 플러스":'369000',
+                    "줄라 피라미드":'199000',
+                    "줄라 피라미드 프리미엄":'299000',
+                    "줄라 피라미드 프리미엄 플러스":'399000',
+                    "카카오프렌즈 피라미드":'199000',
+                    "카카오프렌즈 피라미드 프리미엄":'299000',
+                    "카카오프렌즈 피라미드 프리미엄 플러스":'399000',
+                };
+
+                const bizOttoman = {
+                    "오토만 스탠다드":'139000',
+                    "오토만 프리미엄":'239000',
+                    "오토만 프리미엄 플러스":'339000',
+                    "럭스 오토만":'179000',
+                    "럭스 오토만 프리미엄":'279000',
+                    "럭스 오토만 프리미엄 플러스":'379000',
+                    "스타워즈 럭스 오토만":'179000',
+                    "스타워즈 오토만 프리미엄":'279000',
+                    "스타워즈 오토만 프리미엄 플러스":'379000' 
+                };
+
+
+
+
+                const bizHugibo = {
+                    "허기보":'259000',
+                    "허기보 프리미엄":'339000',
+                    "허기보 프리미엄 플러스":'419000',
+                };
+
+                const bizBobble = {
+                    "디즈니 미니 버블":'309000',
+                    "디즈니 미니 버블 프리미엄":'389000',
+                    "디즈니 미니 버블 프리미엄 플러스":'549000',
+                    "디즈니 미키 버블":'309000',
+                    "디즈니 미키 버블 프리미엄":'389000',
+                    "디즈니 미키 버블 프리미엄 플러스":'549000',
+                }; 
+
+                const bizHugger = {
+                    "토이스토리 우디 허거":'309000',
+                    "토이스토리 우디 허거 프리미엄":'429000',
+                    "토이스토리 우디 허거 프리미엄 플러스":'549000',
+                    "토이스토리 버즈 허거":'309000',
+                    "토이스토리 버즈 허거 프리미엄":'429000',
+                    "토이스토리 버즈 허거 프리미엄 플러스":'549000',
+                    "토이스토리 알린 허거":'309000',
+                    "토이스토리 알린 허거 프리미엄":'429000',
+                    "토이스토리 알린 허거 프리미엄 플러스":'549000',
+                    "디즈니 미키 허거":'309000',
+                    "디즈니 미키 허거 프리미엄":'429000',
+                    "디즈니 미키 허거 프리미엄 플러스":'549000',
+                    "디즈니 미니 허거":'309000',
+                    "디즈니 미니 허거 프리미엄":'429000',
+                    "디즈니 미니 허거 프리미엄 플러스":'549000',
+                    "디즈니 도날드 허거":'309000',
+                    "디즈니 도날드 허거 프리미엄":'429000',
+                    "디즈니 도날드 허거 프리미엄 플러스":'549000',
+                };
+                
+                const bizModju = {
+                    "모듀 소파 코너":'649000',
+                    "모듀 소파 탑":'589000',
+                    "모듀 소파 베이스":'419000',
+                    "모듀 스퀘어 필로우":'54000',
+                    "모듀 롤 닷":'54000',
+                }
+                const bizSupport = {
+                    "서포트 스탠다드":'179000',
+                    "서포트 프리미엄":'279000',
+                    "서포트 프리미엄 플러스":'379000',
+                    "줄라 서포트":'209000',
+                    "줄라 서포트 프리미엄":'309000',
+                    "줄라 서포트 프리미엄 플러스":'409000',
+                    "럭스 서포트":'219000',
+                    "럭스 서포트 프리미엄":'319000',
+                    "럭스 서포트 프리미엄 플러스":'419000',
+                    "카카오프렌즈 서포트":'209000',
+                    "카카오프렌즈 서포트 프리미엄":'309000',
+                    "카카오프렌즈 서포트 프리미엄 플러스":'409000',
+                    "스타워즈 서포트":'219000',
+                    "스타워즈 서포트 프리미엄":'319000',
+                    "스타워즈 서포트 프리미엄 플러스":'419000',
+                }
+
+                const bizRollMax = {
+                    "롤 맥스":'199000',
+                    "롤 맥스 프리미엄":'299000',
+                    "롤 맥스 프리미엄 플러스":'399000',
+                    "믹스 롤 맥스":'229000',
+                    "믹스 롤 맥스 프리미엄":'329000',
+                    "믹스 롤 맥스 프리미엄 플러스":'429000',                   
+                    "럭스 롤 맥스":'239000',
+                    "럭스 롤 맥스 프리미엄":'339000',
+                    "럭스 롤 맥스 프리미엄 플러스":'439000',
+                }
+
+                const bizRollMini = {
+                    "롤 미니":'84000',
+                    "롤 미니 프리미엄":'154000',
+                }
+
+                const bizCaterPillarRollmax = {
+                    "카터필러 롤 맥스":'189000',
+                    "카터필러 롤 맥스 프리미엄":'289000',
+                    "카터필러 롤 맥스 프리미엄 플러스":'389000',
+                }
+                const bizCaterPillarRollmidi = {
+                    "카터필러 롤 미디":'124000',
+                    "카터필러 롤 미디 프리미엄":'204000',
+                }
+                const bizRollmate = {
+                    "앨리게이터 롤 메이트":'94000',
+                    "팍스 롤 메이트":'94000',
+                    "도그 롤 메이트":'94000',
+                    "유니콘 롤 메이트":'94000',
+                    "판다 롤 메이트":'94000',
+                }
+                const bizMate = {
+                    "팍스 메가 메이트,페스터스":'78800',
+                    "유니콘 메가 메이트,유니크":'78800',
+                    "판다 롤 메이트":'94000',
+                    "샤크 메이트,지그프리트":'38800',
+                    "지라프 메이트,조젯":'38800',
+                    "헤지호그 메이트,휴고":'38800',
+                    "코알라 메이트,케빈":'38800',
+                    "펭귄 메이트,펄":'38800',
+                    "라쿤 메이트,로미":'38800',
+                    "판다 메이트,셸비":'38800',
+                    "멍키 메이트,모리슨":'38800',
+                    "아울 메이트,오파":'38800',
+                    "퍼플 캣 메이트, 칼리스타":'38800',
+                    "스타워즈 다스 베이더 메이트":'58800',
+                    "스타워즈 더 차일드 그로구 메이트":'58800',
+                    "스타워즈 츄바카 메이트":'58800',
+                    "스타워즈 스톰트루퍼 메이트":'58800',
+                    "스타워즈 포그 메이트":'58800',
+                    "스타워즈 요다 메이트":'58800',
+                    "스타워즈 이웍 메이트":'58800',
+                    "스타워즈 R2-D2 메이트":'58800',
+                    "스타워즈 BB-8 메이트":'58800',
+                    "스타워즈 만달로리안 메이트":'58800',
+                    "디즈니 미니 메이트":'58800',
+                    "디즈니 도날드 메이트":'58800',
+                    "디즈니 미키 메이트 레인보우":'58800',
+                }
+                const bizAcc = {
+                    "스퀴지보 애니멀":'15800',
+                    "스타워즈 스퀴지보":'18800',
+                    "솔리드 스퀴지보":'12800',
+                    "디즈니 스퀴지보":'18800',
+                    "토이스토리 스퀴지보":'18800',
+                    "스퀴지보 하트":'15800',
+                    "트레이보 엑스":'71800',
+                    "타블로 엑스":'42800',
+                    "코지보":'119000',
+                    "타블로,":'37800',
+                    "볼 미니":'12800',
+                    "볼 맥스":'19800',
+                    "샤이니보":'9800',
+                    "코지보 트래블":'47800',
+                    "캔버스 쿠션 미니":'12800',
+                    "캔버스 쿠션 스퀘어":'32800',
+                    "요가보":'159000',
+
+                    "요기박스 큐브 2.0":'69800',
+                    "패브릭 물감":'4800',
+                    "월 아트":'24800',
+                    "요기박스 그랑데":'149000',
+
+                }
+                const biAroma = {
+                    "사이너스 마이너스 2.0 클레이":'19800',
+                    "숄더 원더 클레이":'39800',
+                    "백 마이스터 클레이":'39800',
+                    "키보드 쿠션 2.0 클레이":'29800',
+                    "바디 허그 2.0 클레이":'39800',
+                    "보 도우":'24800',
+                    "아로마 슬리퍼":'39800',
+                }
+                const bizCushion = {
+                    "냅 엑스":'47800',
+                    "라운드 필로우":'49800',
+                    "지퍼롤":'42800',
+                    "하트 필로우":'44800',
+                    "메가 문 필로우":'119000',
+                }
+
+                const bizRug= {
+                    "요기보 콜렉션 러그 스퀘어 라지":'184000',
+                    "요기보 콜렉션 러그 라운드":'144000',
+                    "요기보 콜렉션 러그 스퀘어 스몰":'104000',
+                }
+                const bizPet= {
+                    "도기보 미디":'129000',
+                }
+
+                $('.table tbody').on('change touchstart', '[id^=goodsName_]', function() {
+                    const currentId = $(this).attr('id');
+                    const currentCounter = currentId.split("_")[1];
+                    const selectedProduct = $(this).val();
+
+                    const bizOptions = {
+                        "맥스": {biz: bizMax},
+                        "더블": {biz: bizDouble},
+                        "프라임":{biz:bizPrime},
+                        "슬림":{biz:bizSlim},
+                        "미디":{biz:bizMidi},
+                        "미니":{biz:bizMini},
+                        "팟":{biz:bizPod},
+                        "드롭":{biz:bizDrop},
+                        "라운저":{biz:bizLounger},
+                        "피라미드":{biz:bizPyramid},
+                        "오토만":{biz:bizOttoman},
+                        "허기보":{biz:bizHugibo},
+                        "버블":{biz:bizBobble},
+                        "허거":{biz:bizHugger},
+                        "모듀":{biz:bizModju},
+                        "서포트":{biz:bizSupport},
+                        "롤 맥스":{biz:bizRollMax},
+                        "롤 미니":{biz:bizRollMini},
+                        "카터필러 롤 맥스":{biz:bizCaterPillarRollmax},
+                        "카터필러 롤 미디":{biz:bizCaterPillarRollmidi},
+                        "롤 메이트":{biz:bizRollmate},
+                        "캐릭터인형":{biz:bizMate},
+                        "액세서리":{biz:bizAcc},
+                        "아로마테라피":{biz:biAroma},
+                        "쿠션":{biz:bizCushion},
+                        "러그":{biz:bizRug},
+                        "펫":{biz:bizPet},
+                    };
+                    const bizSelect = $(`#goodsBiz_${currentCounter}`);
+                    bizSelect.find('option:not(:first)').remove();
+
+                    const selectedOption = bizOptions[selectedProduct];
+                    if (selectedOption) {
+                        Object.keys(selectedOption.biz).forEach(biz => {
+                            const optionElement = `<option value="${biz}" data-price="${selectedOption.biz[biz]}">${biz}</option>`;
+                            bizSelect.append(optionElement);
+                        });
+                    }
+
+                    // selectedBiz 및 colorOptions 초기화
+                    const selectedBiz = $(`#goodsBiz_${currentCounter}`);
+                    selectedBiz.val(); 
+
+                    const colorOptions = $(`#goodsColor_${currentCounter}`); 
+                    colorOptions.find('option').remove();
+                    colorOptions.append('<option>기본 색상</option>');
+                });
+            //비즈 선택
+                $('.table tbody').on('change touchstart', '[id^=goodsBiz_]', function() {
+                    const selectedBiz = $(this).val();
+
+                    const colorOptions = {
+                    "맥스 스탠다드": {class: 'max', colors: standardColor},
+                    "맥스 프리미엄": {class: 'max', colors: standardColor},
+                    "맥스 프리미엄 플러스": {class: 'max', colors: standardColor},
+                    "럭스 맥스": {class: 'max', colors: luxColor},
+                    "럭스 맥스 프리미엄": {class: 'max', colors: luxColor},
+                    "럭스 프리미엄 플러스": {class: 'max', colors: luxColor},
+                    "줄라 맥스": {class: 'max', colors: zoolaColor},
+                    "줄라 맥스 프리미엄": {class: 'max', colors: zoolaColor},
+                    "줄라 맥스 프리미엄 플러스": {class: 'max', colors: zoolaColor},
+                    "믹스 맥스": {class: 'max', colors: mixColor},
+                    "믹스 맥스 프리미엄": {class: 'max', colors: mixColor},
+                    "믹스 맥스 프리미엄 플러스": {class: 'max', colors: mixColor},
+
+                    "맥스 스타워즈": {class: 'max', colors: starColor},
+                    "맥스 스타워즈 프리미엄": {class: 'max', colors: starColor},
+                    "맥스 스타워즈 프리미엄 플러스": {class: 'max', colors: starColor},
+
+
+                    "더블 스탠다드": {class: 'double', colors: standardColor},
+                    "더블 프리미엄": {class: 'double', colors: standardColor},
+                    "더블 프리미엄 플러스": {class: 'double', colors: standardColor},
+
+                    "슬림 스탠다드": {class: 'slim', colors: standardColor},
+                    "슬림 프리미엄": {class: 'slim', colors: standardColor},
+                    "슬림 프리미엄 플러스": {class: 'slim', colors: standardColor},
+                    "럭스 슬림": {class: 'slim', colors: luxColor},
+                    "럭스 슬림 프리미엄": {class: 'slim', colors: luxColor},
+                    "럭스 슬림 프리미엄 플러스": {class: 'slim', colors: luxColor},
+                    "줄라 슬림": {class: 'slim', colors: zoolaColor},
+                    "줄라 슬림 프리미엄": {class: 'slim', colors: zoolaColor},
+                    "줄라 슬림 프리미엄 플러스": {class: 'slim', colors: zoolaColor},
+                    "믹스 슬림": {class: 'slim', colors: mixColor},
+                    "믹스 슬림 프리미엄": {class: 'slim', colors: mixColor},
+                    "믹스 슬림 프리미엄 플러스": {class: 'slim', colors: mixColor},
+                    "카카오프렌즈 슬림": {class: 'slim', colors: kakaoColor},
+                    "카카오프렌즈 슬림 프리미엄": {class: 'slim', colors: kakaoColor},
+                    "카카오프렌즈 슬림 프리미엄 플러스": {class: 'slim', colors: kakaoColor},
+
+                    
+                    "미디 스탠다드": {class: 'midi', colors: standardColor},
+                    "미디 프리미엄": {class: 'midi', colors: standardColor},
+                    "미디 프리미엄 플러스": {class: 'midi', colors: standardColor},
+                    "줄라 미디": {class: 'midi', colors: zoolaColor},
+                    "줄라 미디 프리미엄": {class: 'midi', colors: zoolaColor},
+                    "줄라 미디 프리미엄 플러스": {class: 'midi', colors: zoolaColor},    
+
+                    "미니 스탠다드": {class: 'mini', colors: standardColor},
+                    "미니 프리미엄": {class: 'mini', colors: standardColor},
+                    "미니 프리미엄 플러스": {class: 'mini', colors: standardColor},
+                    "줄라 미니": {class: 'mini', colors: zoolaColor},
+                    "줄라 미니 프리미엄": {class: 'mini', colors: zoolaColor},
+                    "줄라 미니 프리미엄 플러스": {class: 'mini', colors: zoolaColor}, 
+
+                    "팟 스탠다드": {class: 'pod', colors: standardColor},
+                    "팟 프리미엄": {class: 'pod', colors: standardColor},
+                    "팟 프리미엄 플러스": {class: 'pod', colors: standardColor},
+                    "줄라 팟": {class: 'pod', colors: zoolaColor},
+                    "줄라 팟 프리미엄": {class: 'pod', colors: zoolaColor},
+                    "줄라 팟 프리미엄 플러스": {class: 'pod', colors: zoolaColor}, 
+
+                    "드롭 스탠다드": {class: 'drop', colors: standardColor},
+                    "드롭 프리미엄": {class: 'drop', colors: standardColor},
+                    "드롭 프리미엄 플러스": {class: 'drop', colors: standardColor},
+                    "줄라 드롭": {class: 'drop', colors: zoolaColor},
+                    "줄라 드롭 프리미엄": {class: 'drop', colors: zoolaColor},
+                    "줄라 드롭 프리미엄 플러스": {class: 'drop', colors: zoolaColor}, 
+
+                    "믹스 드롭": {class: 'drop', colors: mixColor}, 
+                    "믹스 드롭 프리미엄": {class: 'drop', colors: mixColor}, 
+                    "믹스 드롭 프리미엄 플러스": {class: 'drop', colors: mixColor}, 
+
+                    "카카오프렌즈 드롭": {class: 'drop', colors: kakaoColor},
+                    "카카오프렌즈 드롭 프리미엄": {class: 'drop', colors: kakaoColor},
+                    "카카오프렌즈 드롭 프리미엄 플러스": {class: 'drop', colors: kakaoColor},
+                    "스타워즈 드롭": {class: 'drop', colors: starColor},
+                    "스타워즈 드롭 프리미엄": {class: 'drop', colors: starColor},
+                    "스타워즈 드롭 프리미엄 플러스": {class: 'drop', colors: starColor},     
+
+                    "라운저 스탠다드": {class: 'lounger', colors: standardColor},
+                    "라운저 프리미엄": {class: 'lounger', colors: standardColor},
+                    "라운저 프리미엄 플러스": {class: 'lounger', colors: standardColor},
+                    "줄라 라운저": {class: 'lounger', colors: zoolaColor},
+                    "줄라 라운저 프리미엄": {class: 'lounger', colors: zoolaColor},
+                    "줄라 라운저 프리미엄 플러스": {class: 'lounger', colors: zoolaColor}, 
+                    "스타워즈 라운저": {class: 'lounger', colors: starColor},
+                    "스타워즈 라운저 프리미엄": {class: 'lounger', colors: starColor},
+                    "스타워즈 라운저 프리미엄 플러스": {class: 'lounger', colors: starColor},    
+                    "믹스 라운저": {class: 'lounger', colors: mixColor},
+                    "믹스 라운저 프리미엄": {class: 'lounger', colors: mixColor},
+                    "믹스 라운저 프리미엄 플러스": {class: 'lounger', colors: mixColor},
+
+                    "피라미드 스탠다드": {class: 'pyramid', colors: standardColor},
+                    "피라미드 프리미엄": {class: 'pyramid', colors: standardColor},
+                    "피라미드 프리미엄 플러스": {class: 'pyramid', colors: standardColor},
+                    "줄라 피라미드": {class: 'pyramid', colors: zoolaColor},
+                    "줄라 피라미드 프리미엄": {class: 'pyramid', colors: zoolaColor},
+                    "줄라 피라미드 프리미엄 플러스": {class: 'pyramid', colors: zoolaColor}, 
+                    "카카오프렌즈 피라미드": {class: 'pyramid', colors: kakaoColor},
+                    "카카오프렌즈 피라미드 프리미엄": {class: 'pyramid', colors: kakaoColor},
+                    "카카오프렌즈 피라미드 프리미엄 플러스": {class: 'pyramid', colors: kakaoColor},
+
+
+                    "오토만 스탠다드": {class: 'ottoman', colors: standardColor},
+                    "오토만 프리미엄": {class: 'ottoman', colors: standardColor},
+                    "오토만 프리미엄 플러스": {class: 'ottoman', colors: standardColor},
+                    "럭스 오토만": {class: 'ottoman', colors: luxColor},
+                    "럭스 오토만 프리미엄": {class: 'ottoman', colors: luxColor},
+                    "럭스 오토만 프리미엄 플러스": {class: 'ottoman', colors: luxColor},
+                    "스타워즈 럭스 오토만": {class: 'ottoman', colors: starColor},
+                    "스타워즈 오토만 프리미엄": {class: 'ottoman', colors: starColor},
+                    "스타워즈 오토만 프리미엄 플러스": {class: 'ottoman', colors: starColor},
+
+                    "허기보 ": {class: 'hugibo', colors: hugiColor},
+                    "허기보 프리미엄": {class: 'hugibo', colors: hugiColor},
+                    "허기보 프리미엄 플러스": {class: 'hugibo', colors: hugiColor},
+
+                    "모듀 스퀘어 필로우 ": {class: 'modju', colors: modjuColor},
+                    "모듀 롤 닷": {class: 'modju', colors: modjuColor},
+                    "모듀 소파 베이스": {class: 'modju', colors: modjuColor},    
+                    "모듀 소파 베이스": {class: 'modju', colors: modjuColor},  
+                    "모듀 소파 탑": {class: 'modju', colors: modjuColor},     
+                    "모듀 소파 코너": {class: 'modju', colors: modjuColor},               
+
+                    "서포트 스탠다드": {class: 'support', colors: standardColor},
+                    "서포트 프리미엄": {class: 'support', colors: standardColor},
+                    "서포트 프리미엄 플러스": {class: 'support', colors: standardColor},
+                    "럭스 서포트": {class: 'support', colors: luxColor},
+                    "럭스 서포트 프리미엄": {class: 'support', colors: luxColor},
+                    "럭스 서포트 프리미엄 플러스": {class: 'support', colors: luxColor},
+                    "줄라 서포트": {class: 'support', colors: zoolaColor},
+                    "줄라 서포트 프리미엄": {class: 'support', colors: zoolaColor},
+                    "줄라 서포트 프리미엄 플러스": {class: 'support', colors: zoolaColor},
+                    "카카오프렌즈 서포트": {class: 'support', colors: kakaoColor},
+                    "카카오프렌즈 서포트 프리미엄": {class: 'support', colors: kakaoColor},
+                    "카카오프렌즈 서포트 프리미엄 플러스": {class: 'support', colors: kakaoColor},                
+                    "스타워즈 서포트": {class: 'drop', colors: starColor},
+                    "스타워즈 서포트 프리미엄": {class: 'drop', colors: starColor},
+                    "스타워즈 서포트 프리미엄 플러스": {class: 'drop', colors: starColor},    
+
+                    "롤 맥스": {class: 'rollmax', colors: standardColor},
+                    "롤 맥스 프리미엄": {class: 'rollmax', colors: standardColor},
+                    "롤 맥스 프리미엄 플러스": {class: 'rollmax', colors: standardColor},
+
+                    "믹스 롤 맥스": {class: 'rollmax', colors: mixColor},
+                    "믹스 롤 맥스 프리미엄": {class: 'rollmax', colors: mixColor},
+                    "믹스 롤 맥스 프리미엄 플러스": {class: 'rollmax', colors: mixColor},
+
+
+                    "럭스 롤 맥스": {class: 'rollmax', colors: luxColor},
+                    "럭스 롤 맥스 프리미엄": {class: 'rollmax', colors: luxColor},
+                    "럭스 롤 맥스 프리미엄 플러스": {class: 'rollmax', colors: luxColor},
+
+                    "롤 미니": {class: 'rollmini', colors: standardColor},
+                    "롤 미니 프리미엄": {class: 'rollmini', colors: standardColor},
+
+                    "카터필러 롤 맥스": {class: 'caterpillarRollmax', colors: mixColor},
+                    "카터필러 롤 맥스 프리미엄": {class: 'caterpillarRollmax', colors: mixColor},
+                    "카터필러 롤 맥스 프리미엄 플러스": {class: 'caterpillarRollmax', colors: mixColor},  
+
+                    "카터필러 롤 미디": {class: 'caterpillarRollmidi', colors: mixColor},
+                    "카터필러 롤 미디 프리미엄": {class: 'caterpillarRollmidi', colors: mixColor},
+                    "카터필러 롤 미디 프리미엄 플러스": {class: 'caterpillarRollmidi', colors: mixColor},    
+                    "카카오프렌즈 카터필러 롤 미디": {class: 'caterpillarRollmidi', colors: kakaoColor},  
+                    "카카오프렌즈 카터필러 롤 미디 프리미엄": {class: 'caterpillarRollmidi', colors: kakaoColor},    
+                    //단품들
+                        "앨리게이터 롤 메이트":{colors: null},
+                        "팍스 롤 메이트":{colors: null},
+                        "도그 롤 메이트":{colors: null},
+                        "유니콘 롤 메이트":{colors: null},
+                        "판다 롤 메이트":{colors: null},
+                        "팍스 메가 메이트,페스터스":{colors: null},
+                        "유니콘 메가 메이트,유니크":{colors: null},
+                        "판다 롤 메이트":{colors: null},
+                        "샤크 메이트,지그프리트":{colors: null},
+                        "지라프 메이트,조젯":{colors: null},
+                        "헤지호그 메이트,휴고":{colors: null},
+                        "코알라 메이트,케빈":{colors: null},
+                        "펭귄 메이트,펄":{colors: null},
+                        "라쿤 메이트,로미":{colors: null},
+                        "판다 메이트,셸비":{colors: null},
+                        "멍키 메이트,모리슨":{colors: null},
+                        "아울 메이트,오파":{colors: null},
+                        "퍼블 캣 메이트,칼리스타":{colors: null},
+                        "스타워즈 다스 베이더 메이트":{colors: null},
+                        "스타워즈 더 차일드 그로구 메이트":{colors: null},
+                        "스타워즈 츄바카 메이트":{colors: null},
+                        "스타워즈 스톰트루퍼 메이트":{colors: null},
+                        "스타워즈 포그 메이트":{colors: null},
+                        "스타워즈 요다 메이트":{colors: null},
+                        "스타워즈 이웍 메이트":{colors: null},
+                        "스타워즈 R2-D2 메이트":{colors: null},
+                        "스타워즈 BB-8 메이트":{colors: null},
+                        "스타워즈 만달로리안 메이트":{colors: null},
+                        "디즈니 미니 메이트":{colors: null},
+                        "디즈니 도날드 메이트":{colors: null},
+                        "디즈니 미키 메이트 레인보우":{colors: null}, 
+                        "팍스 메가 메이트,페스터스":{colors: null},
+                        "유니콘 메가 메이트,유니크":{colors: null},
+                        "판다 롤 메이트":{colors: null},
+                        "샤크 메이트,지그프리트":{colors: null},
+                        "지라프 메이트,조젯":{colors: null},
+                        "헤지호그 메이트,휴고":{colors: null},
+                        "코알라 메이트,케빈":{colors: null},
+                        "펭귄 메이트,펄":{colors: null},
+                        "라쿤 메이트,로미":{colors: null},
+                        "판다 메이트,셸비":{colors: null},
+                        "멍키 메이트,모리슨":{colors: null},
+                        "아울 메이트,오파":{colors: null},
+                        "퍼플 캣 메이트, 칼리스타":{colors: null},
+                        "스타워즈 다스 베이더 메이트":{colors: null},
+                        "스타워즈 더 차일드 그로구 메이트":{colors: null},
+                        "스타워즈 츄바카 메이트":{colors: null},
+                        "스타워즈 스톰트루퍼 메이트":{colors: null},
+                        "스타워즈 포그 메이트":{colors: null},
+                        "스타워즈 요다 메이트":{colors: null},
+                        "스타워즈 이웍 메이트":{colors: null},
+                        "스타워즈 R2-D2 메이트":{colors: null},
+                        "스타워즈 BB-8 메이트":{colors: null},
+                        "스타워즈 만달로리안 메이트":{colors: null},
+                        "디즈니 미니 메이트":{colors: null},
+                        "디즈니 도날드 메이트":{colors: null},
+                        "디즈니 미키 메이트 레인보우":{colors: null},  
+                        "스퀴지보 애니멀":{colors: null},
+                        "스타워즈 스퀴지보":{colors: null},
+                        "솔리드 스퀴지보":{colors: null},
+                        "디즈니 스퀴지보":{colors: null},
+                        "토이스토리 스퀴지보":{colors: null},
+                        "스퀴지보 하트":{colors: null},
+                        "트레이보 엑스":{colors: null},
+                        "타블로 엑스":{colors: null},
+                        "코지보":{colors: null},
+                        "타블로,":{colors: null},
+                        "볼 미니":{colors: null},
+                        "볼 맥스":{colors: null},
+                        "샤이니보":{colors: null},
+                        "코지보 트래블":{colors: null},
+                        "캔버스 쿠션 미니":{colors: null},
+                        "캔버스 쿠션 스퀘어":{colors: null},
+                        "요가보":{colors: null},
+                        "요가박스 큐브 2.0":{colors: null},
+                        "패브릭 물감":{colors: null},
+                        "월 아트":{colors: null},
+                        "요기박스 그랑데":{colors: null},
+                        "사이너스 마이너스 2.0 클레이":{colors: null},
+                        "숄더 원더 클레이":{colors: null},
+                        "백 마이스터 클레이":{colors: null},
+                        "키보드 쿠션 2.0 클레이":{colors: null},
+                        "바디 허그 2.0 클레이":{colors: null},
+                        "보 도우":{colors: null},
+                        "아로마 슬리퍼":{colors: null},
+                        "냅 엑스":{colors: null},
+                        "라운드 필로우":{colors: null},
+                        "지퍼롤":{colors: null},
+                        "하트 필로우":{colors: null},
+                        "메가 문 필로우":{colors: null},
+                        "요기보 콜렉션 러그 스퀘어 라지":{colors: null},
+                        "요기보 콜렉션 러그 라운드":{colors: null},
+                        "요기보 콜렉션 러그 스퀘어 스몰":{colors: null},
+                        "도기보 미디":{colors: null}, 
+                        "토이스토리 우디 허거":{colors: null},
+                        "토이스토리 우디 허거 프리미엄":{colors: null},
+                        "토이스토리 우디 허거 프리미엄 플러스":{colors: null},
+                        "토이스토리 버즈 허거":{colors: null},
+                        "토이스토리 버즈 허거 프리미엄":{colors: null},
+                        "토이스토리 버즈 허거 프리미엄 플러스":{colors: null},
+                        "토이스토리 알린 허거":{colors: null},
+                        "토이스토리 알린 허거 프리미엄":{colors: null},
+                        "토이스토리 알린 허거 프리미엄 플러스":{colors: null},
+                        "디즈니 미키 허거":{colors: null},
+                        "디즈니 미키 허거 프리미엄":{colors: null},
+                        "디즈니 미키 허거 프리미엄 플러스":{colors: null},
+                        "디즈니 미니 허거":{colors: null},
+                        "디즈니 미니 허거 프리미엄":{colors: null},
+                        "디즈니 미니 허거 프리미엄 플러스":{colors: null},
+                        "디즈니 도날드 허거":{colors: null},
+                        "디즈니 도날드 허거 프리미엄":{colors: null},
+                        "디즈니 도날드 허거 프리미엄 플러스":{colors: null},                                                                 
+                    };
+
+                    const mapping = colorOptions[selectedBiz];
+                    if (mapping) {
+                        $('.biz_name').hide();
+                        $(`.${mapping.class}`).show();
+                        
+                        const colorSelect = $(`#goodsColor_${productCounter}`);
+
+                        if (mapping.colors === null) { // colors 값이 null인 경우
+                            colorSelect.empty().append('<option value="">단품</option>');
+                        } else {
+                            // 색상 옵션 업데이트
+                            const availableColors = mapping.colors || [];
+                            colorSelect.empty().append('<option value="">색상선택</option>');
+                            availableColors.forEach(color => {
+                                colorSelect.append(`<option value="${color}">${color}</option>`);
+                            });
+                        }
+                    }
+                });
+
+
+                $('.table tbody').on('input', 'td:last-child input', function() {
+                 updateTotalPrice();
+                 });
+      
+        // 페이지 로딩 시 총합계 업데이트
+         updateTotalPrice();
+      
+
+        });
+</script>
+
+
+<br/><br/><br/>
+<style>
+    /*반응형*/
+    /*태블릭*/
+
+    @media only screen and (min-width: 375px) and (max-width:800px) {
+        body{font-size:14px;}
+        .container  { border:none; padding:20px;}
+        #middle_table{overflow-x:scroll;}
+        .totalPriceContainer{font-size:18px;}
+        /*테이블*/
+        .deliver-table{width:100%;}
+        .deliver-table thead th{padding: 5px 0px 5px 0px;font-size:14px;}
+        .deliver-table tbody td {padding: 10px 5px 10px 5px;font-size:14px;}
+        .deliver-table{font-size:14px}
+        .deliver-table th:nth-child(1){width:50%}
+        .deliver-table th:nth-child(2){width:25%}
+        .deliver-table th:nth-child(3){width:25%}
+        .offcanvas-body{font-size:14px;}
+        .individal dd{font-size:13px;}
+        .period_info{font-size:14px;}
+        .period_info label{font-size:14px;}
+        dl{margin-bottom:2rem}
+        footer ul{width:68%;margin:0 auto;}
+         /**/
+         .counter_number{height:33px;}
+         .counter_number li{float:left;}
+        .counter_number li:nth-child(1){width:20%;height:31px;font-size:20px;line-height:31px;font-weight:800;}
+        .counter_number li:nth-child(2){width:60%;}
+        .counter_number li input{float:left;width:100%;text-align:center;height:31px;border:none;}
+        .counter_number li:nth-child(3){width:20%;font-size:17px;height:31px;line-height:31px;font-weight:600;}
+
+    }
+
+    @media only screen and (min-width:250px) and (max-width:400px) {
+        body{font-size:13px;}
+        .container  {
+            border:none;
+            padding:10px;
+        }
+        table input{font-size:13px!important;}
+        select{font-size:13px!important;}
+        select option{font-size:13px!important;}
+        .deliver-table thead th{padding: 5px 0px 5px 0px;font-size:13px;}
+        .deliver-table tbody td {padding: 10px 5px 10px 5px;font-size:13px;}
+        .deliver-table{font-size:14px}
+        .deliver-table th:nth-child(1){width:50%}
+        .deliver-table th:nth-child(2){width:25%}
+        .deliver-table th:nth-child(3){width:25%}
+        .offcanvas-body{font-size:11px;}
+        .individal dd{font-size:12px;}
+        .individal ul li{margin:0;}
+        .period_info{font-size:13px;}
+        .period_info label{font-size:13px;margin-left:5px;}
+        dl{margin-bottom:2rem}
+        footer ul{width:93%;margin:0 auto;}
+        .infor_txt ul li:nth-child(2){font-size:10px;}
+        .order-title{font-size:20px;padding-bottom:10px!important;}
+        .entry_info{font-size:20px;}
+        input[type=checkbox], input[type=radio] {
+                box-sizing: border-box;
+                padding: 0;
+                width: 18px;
+                height: 18px;
+                margin-top: 6px;
+                vertical-align: text-bottom;
+            }
+    }
+</style>
+
+</body>
+</html>

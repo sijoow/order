@@ -1,0 +1,422 @@
+<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    <!-- Navbar Brand-->  
+    <a class="navbar-brand ps-3" href="/"><img src="https://yogibo.kr/web/img/icon/요기보로고_W.png" style="width:60%"alt=""></a>
+ 
+    <!-- Sidebar Toggle-->
+    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+
+    <!-- Navbar Search-->
+    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+        <div class="input-group">
+            <i class="fas fa-search"></i>
+        </div>
+    </form>
+    <!-- Navbar-->
+    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+      <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <% if(isLoggedin) { %>
+                  <li><a class="dropdown-item" href="/mypage">My page</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><form action="/logout" method="post"><button type="submit" class="dropdown-item">Logout</button></form></li>
+                  <li><%= user.id %></li>
+              <% } else { %>
+                  <li><a href="/login">login</a></li>
+              <% } %>
+          </ul>
+      </li>
+  </ul>
+</nav>
+
+
+<div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <div class="sb-sidenav-menu-heading">주문서 수집</div>
+                     <!--menu 탭-->
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                        매장확인
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="/master">주문서확인</a>
+                            <a class="nav-link" href="/store/order">고객 주문서</a>
+                        </nav>
+                    </div>
+
+                    
+                    <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                                Authentication
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="login.html">Login</a>
+                                    <a class="nav-link" href="register.html">Register</a>
+                                    <a class="nav-link" href="password.html">Forgot Password</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                                Error
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="401.html">401 Page</a>
+                                    <a class="nav-link" href="404.html">404 Page</a>
+                                    <a class="nav-link" href="500.html">500 Page</a>
+                                </nav>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="sb-sidenav-footer">
+                <div class="small">Yogibo Korea</div>
+                (주)요기코퍼레이션
+            </div>
+        </nav>
+    </div>
+
+
+<style>
+.card-body{text-align:center;}
+.dataTables_wrapper .dataTables_paginate .paginate_button{background:#fff;padding:0!important;padding-left:5px;padding-right:5px;}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{
+  background:none!important;padding:0!important;border:none!important;border-bottom:2px solid #111!important;font-weight:bold;
+}
+#example_previous{position:absolute;z-index:-1!important;}
+.next{position:absolute;z-index:-1!important;}
+.dataTables_length{display:none!important;}
+</style>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid">
+
+                <h1 class="mt-5" style="font-weight:600">매장별 매출분석 <span>[마스터]</span></h1>
+  
+                <style>
+                  .store_list{display:inline-block;}
+                  .store_list ul li{float:left;}
+                  .btn-outline-info:hover{background: #00bdd4;color:#fff;}
+                  .chart-sub-title{font-size:12px;margin-top:20px;}
+                </style>
+                <div class="store_list mt-5">
+                  <ul style="padding-left:0px;">
+                      <li><button type="button" class="btn btn-dark ml-2">전국 매장</button></li>
+                      <li><button type="button" class="btn btn-outline-info ml-2" style="border:1px solid #00bdd4">롯데백화점 평촌점</button></li>
+                      <li><button type="button" class="btn btn-outline-info ml-2" style="border:1px solid #00bdd4">롯데백화점 안산점</button></li>
+                      <li><button type="button" class="btn btn-outline-info ml-2" style="border:1px solid #00bdd4">롯데백화점 동탄점</button></li>
+                      <li><button type="button" class="btn btn-outline-info ml-2" style="border:1px solid #00bdd4">롯데백화점 광복점</button></li>
+                      <li><button type="button" class="btn btn-outline-info ml-2" style="border:1px solid #00bdd4">롯데프리미엄아울렛 기흥점</button></li>
+                      <li><button type="button" class="btn btn-outline-info ml-2" style="border:1px solid #00bdd4">롯데프리미엄아울렛 이천점</button></li>
+                      <li><button type="button" class="btn btn-outline-info ml-2" style="border:1px solid #00bdd4">현대백화점 미아점</button></li>
+                      <li><button type="button" class="btn btn-outline-info ml-2" style="border:1px solid #00bdd4">신세계백화점 대구점</button></li>
+                      <li><button type="button" class="btn btn-outline-info ml-2" style="border:1px solid #00bdd4">신세계센텀시티몰 부산점</button></li>
+                      <li><button type="button" class="btn btn-outline-info ml-2" style="border:1px solid #00bdd4">아이파크몰 용산점</button></li>
+                      <li><button type="button" class="btn btn-outline-info ml-2" style="border:1px solid #00bdd4">아이파크몰 고척점</button></li>
+                      <li><button type="button" class="btn btn-outline-info ml-2" style="border:1px solid #00bdd4">스타필드 고양점</button></li>
+                      <li><button type="button" class="btn btn-outline-info ml-2" style="border:1px solid #00bdd4">스타필드 안성점</button></li>
+                      <li><button type="button" class="btn btn-outline-info ml-2" style="border:1px solid #00bdd4">갤러리아백화점 광교점</button></li>
+                  </ul>                 
+               </div>
+              <style>
+                  #storeCharts{max-width:800px;margin-top:20px;min-width:600px;}
+              </style>
+                <div id="day" style="position:absolute;z-index:-1px;opacity:0;"></div>
+                <div id="storeCharts">
+                  <div id="전국 매장"></div>
+                  <div id="롯데백화점 광복점"></div>
+                  <div id="롯데백화점 안산점"></div>
+                  <div id="스타필드 하남점"></div>
+                  <div id="롯데프리미엄아울렛 이천점"></div>
+                  <div id="롯데백화점 평촌점"></div>
+                  <div id="롯데백화점 안산점"></div>
+                  <div id="롯데백화점 동탄점"></div>
+                  <div id="롯데백화점 광복점"></div>
+                  <div id="롯데프리미엄아울렛 기흥점"></div>
+                  <div id="롯데프리미엄아울렛 이천점"></div>
+                  <div id="현대백화점 미아점"></div>
+                  <div id="신세계백화점 대구점"></div>
+                  <div id="신세계센텀시티몰 부산점"></div>
+                  <div id="아이파크몰 용산점"></div>
+                  <div id="아이파크몰 고척점"></div>
+                  <div id="스타필드 고양점"></div>
+                  <div id="스타필드 안성점"></div>
+                  <div id="갤러리아백화점 광교점"></div>
+                </div>
+                <div class="chart-sub-title">※일일 매출 분석 15일단위[제품+배송비]</div>
+
+
+
+                <script>
+                  document.addEventListener('DOMContentLoaded', function() {
+                      // 처음에 모든 매장을 숨김 처리
+                      document.querySelectorAll('#storeCharts > div').forEach(div => {
+                          div.style.display = 'none';
+                      });
+
+                      // '전체 매장'은 처음에 보이게 설정
+                      document.getElementById('전국 매장').style.display = 'block';
+
+                      document.querySelectorAll('.store_list button').forEach(button => {
+                          button.addEventListener('click', function() {
+                              // 모든 매장 숨기기
+                              document.querySelectorAll('#storeCharts > div').forEach(div => {
+                                  div.style.display = 'none';
+                              });
+
+                              // 선택된 버튼에 해당하는 매장만 보이게 설정
+                              const storeId = this.textContent.trim();
+                              const targetDiv = document.getElementById(storeId);
+                              if (targetDiv) {
+                                  targetDiv.style.display = 'block';
+                              }
+                          });
+                      });
+                  });
+
+              </script> 
+
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script>
+                  async function fetchDataAndDrawCharts() {
+                          try {
+                              const response = await fetch('/getData');
+                              const data = await response.json();
+                              const last15Days = getLast15Days();
+
+                              // 판매처 별로 데이터 그룹화
+                              const groupedData = data.reduce((acc, post) => {
+                                  acc[post.판매처] = acc[post.판매처] || [];
+                                  acc[post.판매처].push(post);
+                                  return acc;
+                              }, {});
+
+                              // 전체 매장 데이터 집계
+                              const allStoresData = last15Days.map(day => {
+                                  return data.filter(post => post.날짜 === day)
+                                          .reduce((sum, post) => sum + Number(post.총합계.replace(/,/g, '')), 0);
+                              });
+
+                              // 전체 매장 차트 그리기
+                              const allStoresDiv = document.getElementById('전국 매장');
+                              if (allStoresDiv) {
+                                  const allStoresCanvas = document.createElement('canvas');
+                                  allStoresDiv.appendChild(allStoresCanvas);
+                                  new Chart(allStoresCanvas, {
+                                      type: 'bar',
+                                      data: {
+                                          labels: last15Days,
+                                          datasets: [{
+                                              label: '전국 매장',
+                                              data: allStoresData,
+                                              backgroundColor: '#0dcaf06e',
+                                              borderColor: '#0dcaf06e',
+                                              borderWidth: 1
+                                          }]
+                                      },
+                                      options: {
+                                          scales: {
+                                              y: {
+                                                  ticks: {
+                                                      stepSize: 50000,
+                                                      beginAtZero: true,
+                                                      callback: function(value, index, values) {
+                                                          return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                      }
+                                                  },
+                                                  min: 0,
+                                                  max: 10000000
+                                              }
+                                          }
+                                      }
+                                  });
+                              }
+                              // [기존 코드 유지] 각 판매처별 차트 그리기
+                              const storeNames = Object.keys(groupedData);
+                              storeNames.forEach(store => {
+                                  const storeDiv = document.getElementById(store);
+                                  if (!storeDiv) return; // 해당하는 div가 없으면 넘어간다.
+
+                                  const chartData = last15Days.map(day => {
+                                      const dailySales = groupedData[store].filter(post => post.날짜 === day);
+                                      return dailySales.reduce((sum, post) => sum + Number(post.총합계.replace(/,/g, '')), 0);
+                                  });
+
+                                  // 캔버스 생성 및 div에 추가
+                                  const canvas = document.createElement('canvas');
+                                  storeDiv.appendChild(canvas);
+
+                                  // 차트 그리기
+                                  new Chart(canvas, {
+                                      type: 'bar',
+                                      data: {
+                                          labels: last15Days,
+                                          datasets: [{
+                                              label: store,
+                                              data: chartData,
+                                              backgroundColor: '#0dcaf06e',
+                                              borderColor: '#0dcaf06e',
+                                              borderWidth: 1
+                                          }]
+                                      },
+                                      options: {
+                                          scales: {
+                                              y: {
+                                                  ticks: {
+                                                      stepSize: 50000,
+                                                      beginAtZero: true,
+                                                      callback: function(value, index, values) {
+                                                          return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                      }
+                                                  },
+                                                  min: 0,
+                                                  max: 5000000
+                                              }
+                                          }
+                                      }
+                                  });
+                              });
+
+                          } catch (error) {
+                              console.error('Error:', error);
+                          }
+                      }
+
+                      function getLast15Days() {
+                          const days = [];
+                          const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+
+                          for (let i = 14; i >= 0; i--) {
+                              const d = new Date();
+                              d.setDate(d.getDate() - i);
+                              days.push(d.toLocaleDateString('ko-KR', options).replace(/-/g, '.').slice(0, -1));
+                          }
+                          return days;
+                      }
+
+                      // 함수 호출
+                      fetchDataAndDrawCharts();
+              </script>
+
+                <br/><br/><br/><br/><br/>
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+                <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+                <style>
+                  .card{border:none;}
+                  .store-list{overflow-x:scroll;padding-bottom:40px;}
+                  #example_filter{float:right;padding-bottom:20px;}
+                  .dataTables_length{float:left!important;}
+
+                  #example{font-size:14px;font-family:'Noto Sans KR'}
+                  #example tr:hover{background:#ededed;cursor:default;}
+                  #example td{border-bottom: 1px solid #ddd;}
+                  #example a{color:#00bdd4;}
+          
+                  #example_wrapper{min-width:1300px;}
+                  .dataTables_paginate{margin-top:20px;}
+                  .dataTables_wrapper .dataTables_filter input{border:1px solid #ddd;font-size:12px;padding:5px;width:200px;}
+                  .dataTables_filter label {font-size: 0}
+                  .dataTables_wrapper{width:100%;}
+                  .dataTables_paginate{display:inline-block;width:100%;}
+                  .dataTables_wrapper .dataTables_paginate {text-align: center;}
+                  .dataTables_wrapper .dataTables_paginate{}
+              </style>                
+                <script>
+                  $(document).ready(function() {
+                      $('#example').DataTable({
+                          order: [[0, 'desc']],
+                          columnDefs: [{
+                              targets: 0,
+                              orderable: false
+                          }],
+                          language: {
+                              "sEmptyTable":     "테이블에 데이터가 없습니다",
+                              "sInfo":           "",
+                              "sInfoEmpty":      "0건",
+                              "sInfoFiltered":   "(전체 _MAX_ 건 중 검색결과)",
+                              "sInfoPostFix":    "",
+                              "sInfoThousands":  ",",
+                              "sLengthMenu":     "_MENU_",
+                              "sLoadingRecords": "로딩중...",
+                              "sProcessing":     "처리중...",
+                              "sSearch":         "검색:",
+                              "sZeroRecords":    "검색 결과가 없습니다",
+                              "oPaginate": {
+                                  "sFirst":    "처음",
+                                  "sLast":     "마지막",
+                                  "sNext":     "다음",
+                                  "sPrevious": "이전"
+                              }
+                          }
+                      });
+                      $('.dataTables_filter input').attr('placeholder', '검색어 입력 해주세요');
+                  });
+              </script>
+           
+              
+                <div class="card mb-12">
+                  <h3 class="mt-4 pl-1" style="font-weight:600">오프라인 매장 판매리스트</h3>
+                  <div class="store-list">
+                      <table id="example">
+                          <thead >
+                              <tr>
+                                  <th>판매날짜</th>
+                                  <th>판매지점</th>
+                                  <th>판매자</th>
+                                  <th>상품명</th>
+                                  <th>색상</th>
+                                  <th>수량</th>                                
+                                  <th>할인율</th>
+                                  <th>판매가</th>                                
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <% for (var i = 0; i < posts.length; i++){ %>
+                                  <% var j = 1; %>
+                                  <% while(posts[i]['상품명' + j]) { %>
+                                      <tr>
+                                          <td><%= posts[i].날짜 %></td>
+                                          <td><%= posts[i].판매처 %></td>
+                                          <td><%= posts[i].판매자 %></td>
+                                          <td><%= posts[i]['상품명' + j] %></td>
+                                          <td><%= posts[i]['상품컬러' + j] %></td>
+                                          <td><%= posts[i]['수량' + j] %></td>                                            
+                                          <td><%= posts[i]['할인' + j] %></td>
+                                          <td><%= posts[i]['단가' + j] %></td>                                     
+                                      </tr>
+                                      <% j++; %>
+                                  <% } %>  
+                              <% } %>  
+                          </tbody>                                                                                                            
+                    </table>
+                  </div>
+              </div>
+            </div>
+
+            <br/><br/><br/><br/>
+
+        </main>
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; yogibo Website 2023</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+ 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

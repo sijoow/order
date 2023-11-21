@@ -1,0 +1,873 @@
+<%- include('header.html') %>
+<style>
+dl, ol, ul{margin:0;padding:0;}
+/*매장별 매출 분석 css*/
+
+#salesPrice{display:none;}
+#salesPrice span{display:none;}
+#salesPriceWeekly span{display:none;}
+#salesPriceWeekly{display:none;}
+
+#salesPriceMonth span{display:none;}
+#salesPriceMonth{display:none;}
+
+.card{padding:0;margin:0;}
+/*전국매장*/
+.store_list{
+    display:inline-block;background:#fff;
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border-radius: 0.25rem;
+    padding-top:10px;padding-bottom:10px;
+}
+.store_list ul li{float:left;}
+/*전국매장 그래프*/
+
+#storeCharts canvas{
+    height:auto!important;;padding-top:18px!important;
+    padding-bottom:18px!important;
+    background:#fff;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border-radius: 0.25rem;
+}
+
+
+/*오프라인 매장 판매리스트*/
+#example_filter{float:right;padding-bottom:20px;margin-top:20px;}
+.dataTables_length{float:left!important;}
+
+#example{font-size:14px;font-family:'Noto Sans KR';}
+#example tr:hover{background:#ededed;cursor:default;}
+#example td{border-bottom: 1px solid #ddd;}
+#example a{color:#00bdd4;}
+
+#example_wrapper{}
+.dataTables_paginate{margin-top:20px;}
+.dataTables_wrapper .dataTables_filter input{border:1px solid #ddd;font-size:12px;padding:5px;width:200px;}
+.dataTables_filter label {font-size: 0}
+.dataTables_wrapper{width:100%;}
+.dataTables_paginate{display:inline-block;width:100%;}
+.dataTables_wrapper .dataTables_paginate {text-align: center;}
+.dataTables_wrapper .dataTables_paginate{}
+.dataTables_length{display:none;}
+.dataTables_wrapper .dataTables_paginate .paginate_button{background:#fff;padding:0!important;padding-left:5px;padding-right:5px;}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{
+background:none!important;padding:0!important;border:none!important;border-bottom:2px solid #111!important;font-weight:bold;}
+</style> 
+<% if (certified) { %>
+   <style>
+    /*인증전*/
+    section{display:none;}
+    .nav-item{display:none;}
+    .off-store-text{display:none;}
+   </style>
+<% } %>
+
+  <% if (gocheok) { %>
+    <style>
+        .button_store li{display:none;}
+        .고척점{display:block!important;}
+        .고척점 button{background:#00bdd4;color:#fff;border:none;}
+        .off-store{display:none;}
+        .off-store-text{display:none;}
+    </style>
+  <% } %>
+
+
+  <% if (hanam) { %>
+    <style>
+        .button_store li{display:none;}
+        .하남점{display:block!important;}
+        .하남점 button{background:#00bdd4;color:#fff;border:none;}
+        .off-store{display:none;}
+        .off-store-text{display:none;}
+    </style>
+  <% } %>
+
+  <% if (wongsan) { %>
+    <style>
+        .button_store li{display:none;}
+        .용산점{display:block!important;}
+        .용산점 button{background:#00bdd4;color:#fff;border:none;}
+        .off-store{display:none;}
+        .off-store-text{display:none;}
+    </style>
+  <% } %>
+
+  <% if (dongtan) { %>
+    <style>
+        .button_store li{display:none;}
+        .동탄점{display:block!important;}
+        .동탄점 button{background:#00bdd4;color:#fff;border:none;}
+        .off-store{display:none;}
+        .off-store-text{display:none;}
+    </style>
+  <% } %>
+
+  <% if (gwanggyo) { %>
+    <style>
+        .button_store li{display:none;}
+        .광교점{display:block!important;}
+        .광교점 button{background:#00bdd4;color:#fff;border:none;}
+        .off-store{display:none;}
+        .off-store-text{display:none;}
+    </style>
+  <% } %>
+  <% if (goyang) { %>
+    <style>
+        .button_store li{display:none;}
+        .고양점{display:block!important;}
+        .고양점 button{background:#00bdd4;color:#fff;border:none;}
+        .off-store{display:none;}
+        .off-store-text{display:none;}
+    </style>
+  <% } %>
+
+  <% if (busan) { %>
+    <style>
+        .button_store li{display:none;}
+        .부산점{display:block!important;}
+        .부산점 button{background:#00bdd4;color:#fff;border:none;}
+        .off-store{display:none;}
+        .off-store-text{display:none;}
+    </style>
+  <% } %>
+
+  <% if (daegu) { %>
+    <style>
+        .button_store li{display:none;}
+        .대구점{display:block!important;}
+        .대구점 button{background:#00bdd4;color:#fff;border:none;}
+        .off-store{display:none;}
+        .off-store-text{display:none;}
+    </style>
+  <% } %>
+
+  <% if (kiheung) { %>
+    <style>
+        .button_store li{display:none;}
+        .기흥점{display:block!important;}
+        .기흥점 button{background:#00bdd4;color:#fff;border:none;}
+        .off-store{display:none;}
+        .off-store-text{display:none;}
+    </style>
+  <% } %>
+
+  <% if (ansang) { %>
+    <style>
+        .button_store li{display:none;}
+        .안산점{display:block!important;}
+        .안산점 button{background:#00bdd4;color:#fff;border:none;}
+        .off-store{display:none;}
+        .off-store-text{display:none;}
+    </style>
+  <% } %>
+
+  <% if (gwangbok) { %>
+    <style>
+        .button_store li{display:none;}
+        .광복점{display:block!important;}
+        .광복점 button{background:#00bdd4;color:#fff;border:none;}
+        .off-store{display:none;}
+        .off-store-text{display:none;}
+    </style>
+  <% } %>
+  <% if (echeon) { %>
+    <style>
+        .button_store li{display:none;}
+        .이천점{display:block!important;}
+        .이천점 button{background:#00bdd4;color:#fff;border:none;}
+        .off-store{display:none;}
+        .off-store-text{display:none;}
+    </style>
+  <% } %>
+  <% if (mia) { %>
+    <style>
+        .button_store li{display:none;}
+        .미아점{display:block!important;}
+        .미아점 button{background:#00bdd4;color:#fff;border:none;}
+        .off-store{display:none;}
+        .off-store-text{display:none;}
+    </style>
+  <% } %>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <main id="main" class="main">
+            <div class="container-box">
+                <div class="pagetitle">
+                    <h1 style="font-weight:600;font-size:30px;">매장별 매출분석 <span>[<%= user.근무매장 %>]</span></h1>
+                  </div><!-- End Page Title -->
+
+                <section class="section dashboard">
+                        <div class="row">
+                            <div class="col-md-12 col-xl-4  mt-4 ">
+                                <div class="card info-card sales-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">금일 판매량<span> | today</span></h5>
+                                        <div class="d-flex align-items-center">
+                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-database-fill"></i>
+                                            </div>
+                                            <div class="ps-3">
+                                                <h6 class="today_total_price">
+                                                    <div id="salesPrice"></div>
+                                                    <div id="saleTotalPrice"></div>
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 col-xl-4  mt-4 ">
+                                <div class="card info-card revenue-card" >
+                                    <div class="card-body">
+                                        <h5 class="card-title weekly_txt">주간 판매량<span> | weekly</span></h5>
+                                        <div class="d-flex align-items-center">
+                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="background: #0dcaf038;">
+                                                <i class="bi bi-database-fill" style="color:#00bdd4;"></i>
+                                            </div>
+                                            <div class="ps-3">
+                                                <h6 class="weekly_total_price">
+                                                    <div id="salesPriceWeekly"></div>
+                                                    <div id="saleWeeklyTotalPrice"></div>
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 col-xl-4  mt-4">
+                                <div class="card info-card revenue-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">월간 판매량<span> | month</span></h5> 
+                                        <div class="d-flex align-items-center">
+                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-database-fill"></i>
+                                            </div>
+                                            <div class="ps-3">
+                                                <h6 class="monuth_total_price">
+                                                    <div id="salesPriceMonth"></div>
+                                                    <div id="salesPriceTotalMonthly"></div>
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                  </section>
+
+
+                <!-- store-section 안에서 아이디 에 따라 button text를 확인하여 노출되게 해주기 -->
+
+                  <!--mt-4 col-md-12 col-xl-12 col-sm-12-->
+                  <section class="section dashboard mt-4 store-section">
+                    <div class="row">
+                        <div class="col-md-12 col-xl-12 col-sm-12">
+                            <div class="store_list">
+                                <ul class="button_store">         
+      
+                                    <li class="전국 매장"><button type="button" class="btn btn-dark m-2" style="border:1px solid #111;">전국 매장</button></li>                                    
+                                    <li class="안산점"><button type="button" class="btn btn-outline-info m-2">롯데백화점 안산점</button></li>
+                                    <li class="동탄점"><button type="button" class="btn btn-outline-info m-2">롯데백화점 동탄점</button></li>
+                                    <li class="광복점"><button type="button" class="btn btn-outline-info m-2">롯데백화점 광복점</button></li>
+                                    <li class="기흥점"><button type="button" class="btn btn-outline-info m-2">롯데프리미엄아울렛 기흥점</button></li>
+                                    <li class="이천점"><button type="button" class="btn btn-outline-info m-2">롯데프리미엄아울렛 이천점</button></li>
+                                    <li class="미아점"><button type="button" class="btn btn-outline-info m-2">현대백화점 미아점</button></li>
+                                    <li class="대구점"><button type="button" class="btn btn-outline-info m-2">신세계백화점 대구점</button></li>
+                                    <li class="부산점"><button type="button" class="btn btn-outline-info m-2">신세계센텀시티몰 부산점</button></li>
+                                    <li class="용산점"><button type="button" class="btn btn-outline-info m-2">아이파크몰 용산점</button></li>
+                                    <li class="고척점"><button type="button" class="btn btn-outline-info m-2">아이파크몰 고척점</button></li>
+                                    <li class="하남점"><button type="button" class="btn btn-outline-info m-2">스타필드 하남점</button></li>                                 
+                                    <li class="고양점"><button type="button" class="btn btn-outline-info m-2">스타필드 고양점</button></li>
+                                    <li class="광교점"><button type="button" class="btn btn-outline-info m-2">갤러리아백화점 광교점</button></li>
+                                </ul>                 
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <section class="section dashboard " >
+                    <div class="row">                           
+                        <div id="storeCharts"  class="col-xl-8 col-md-12 mt-4">
+                            <div id="전국 매장"></div>
+                            <div id="롯데백화점 광복점"></div>
+                            <div id="롯데백화점 안산점"></div>
+                            <div id="스타필드 하남점"></div>
+                            <div id="롯데프리미엄아울렛 이천점"></div>
+                            <div id="롯데백화점 평촌점"><span></span></div>
+                            <div id="롯데백화점 안산점"></div>
+                            <div id="롯데백화점 동탄점"></div>
+                            <div id="롯데백화점 광복점"></div>
+                            <div id="롯데프리미엄아울렛 기흥점"></div>
+                            <div id="롯데프리미엄아울렛 이천점"></div>
+                            <div id="현대백화점 미아점"></div>
+                            <div id="신세계백화점 대구점"></div>
+                            <div id="신세계센텀시티몰 부산점"></div>
+                            <div id="아이파크몰 용산점"></div>
+                            <div id="아이파크몰 고척점"></div>
+                            <div id="스타필드 고양점"></div>
+                            <div id="갤러리아백화점 광교점"></div>
+                        </div>
+                        <div class="col-xl-4 col-md-12 mt-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title month-store-text2" > </h5>
+                                    <div class="off-goods-ejs" style="display:none;">
+                                        <% 
+                                        const endDate = new Date();
+                                        const startDate = new Date(endDate.getFullYear(), endDate.getMonth(), 1); // 현재 달의 첫 날로 설정
+                                    
+                                        function aggregateProducts(posts) {
+                                            let aggregated = {};
+                                            for (let i = 0; i < posts.length; i++) {
+                                                if (new Date(posts[i].날짜) >= startDate && new Date(posts[i].날짜) <= endDate) {
+                                                    for (let j = 1; posts[i]['상품명' + j]; j++) {
+                                                        let productName = posts[i]['상품명' + j];
+                                                        if(!aggregated[productName]) {
+                                                            aggregated[productName] = 0;
+                                                        }
+                                                        aggregated[productName] += Number(posts[i]['수량' + j]);
+                                                    }
+                                                }
+                                            }
+                                            return Object.entries(aggregated)
+                                                .sort((a, b) => b[1] - a[1])
+                                                .slice(0, 5)
+                                                .reduce((acc, [key, value]) => {
+                                                    acc[key] = value;
+                                                    return acc;
+                                                }, {});
+                                        }        
+                                    
+                                        const top5Products = aggregateProducts(posts);
+                                        %>
+                                        <% let index = 1; %>
+                                        <% for (let productName in top5Products) { %>
+                                            <tr>
+                                                <td class="goods-data-list">
+                                                    <div class="nds_<%= String(index).padStart(2, '0') %>">
+                                                        <div class="product-data">
+                                                            <span class="product-name" data-product-name="<%= productName %>"><%= productName %></span>
+                                                            <span class="product-count" data-product-count="<%= top5Products[productName] %>"><%= top5Products[productName] %></span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <% index++; %>
+                                        <% } %>
+                                    </div>
+                                    <div id="trafficChart" style="min-height: 457px;" class="echart">판매 데이터 5개이상 노출시 그래프 활성화</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!--전국 매장 월별 판매리스트-->
+                <div class="pagetitle pt-4 mt-5 off-store-text">
+                    <h1 style="font-weight:600;font-size:30px;" class="month-store-text"><span></span></h1>
+                  </div><!-- End Page Title -->
+                <section class="section dashboard col-md-12 mt-5 off-wrapper-store pb-4 pd off-store" style="background:#fff;" >
+                    <div class="store-list" style="background:#fff;min-width:750px;">
+                        <table id="example">
+                            <thead >
+                                <tr>
+                                    <th>판매날짜</th>
+                                    <th>판매지점</th>
+                                    <th>판매자</th>
+                                    <th>상품명</th>
+                                    <th>색상</th>
+                                    <th>수량</th>                                
+                                    <th>할인율</th>
+                                    <th>판매가</th>                                
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% for (var i = 0; i < posts.length; i++){ %>
+                                <% var j = 1; %>
+                                <% while(posts[i]['상품명' + j]) { %>
+                                <tr>
+                                    <td><%= posts[i].날짜 %></td>
+                                    <td><%= posts[i].판매처 %></td>
+                                    <td><%= posts[i].판매자 %></td>
+                                    <td><%= posts[i]['상품명' + j] %></td>
+                                    <td><%= posts[i]['상품컬러' + j] %></td>
+                                    <td><%= posts[i]['수량' + j] %></td>                                            
+                                    <td><%= posts[i]['할인' + j] %></td>
+                                    <td><%= posts[i]['단가' + j] %></td>                                     
+                                </tr>
+                                <% j++; %>
+                                <% } %>  
+                                <% } %>  
+                            </tbody>                                                                                                            
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </main>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // 모든 매장을 숨김 처리
+                document.querySelectorAll('#storeCharts > div').forEach(div => {
+                    div.style.display = 'none';
+                });
+
+                // .store_list의 첫 번째 버튼의 텍스트로 해당 매장을 찾아 보이게 설정
+                const firstButton = document.querySelector('.store_list button');
+                if (firstButton) {
+                    const firstStoreId = firstButton.textContent.trim();
+                    const firstTargetDiv = document.getElementById(firstStoreId);
+                    if (firstTargetDiv) {
+                        firstTargetDiv.style.display = 'block';
+                    }
+                }
+
+                document.querySelectorAll('.store_list button').forEach(button => {
+                    button.addEventListener('click', function() {
+                        // 모든 매장 숨기기
+                        document.querySelectorAll('#storeCharts > div').forEach(div => {
+                            div.style.display = 'none';
+                        });
+
+                        // 선택된 버튼에 해당하는 매장만 보이게 설정
+                        const storeId = this.textContent.trim();
+                        const targetDiv = document.getElementById(storeId);
+                        if (targetDiv) {
+                            targetDiv.style.display = 'block';
+                        }
+                    });
+                });
+            });
+        </script>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const buttons = document.querySelectorAll('.button_store button');     
+                for (let i = 0; i < buttons.length; i++) {
+                    if (getComputedStyle(buttons[i].parentNode).display !== 'none') {
+                        buttons[i].click();
+                        console.log(buttons[i].textContent.trim() + " 버튼이 첫 번째로 클릭되었습니다.");
+                        
+                        // 1초 후에 다시 버튼을 클릭하게 만듭니다.
+                        setTimeout(function() {
+                            buttons[i].click();
+                            console.log(buttons[i].textContent.trim() + " 버튼이 두 번째로 클릭되었습니다.");
+                        }, 100); // 1000ms = 1초
+
+                        break;
+                    }
+                }                             
+                buttons.forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        const clickedButtonText = this.textContent.trim();
+                        const salesPrice = document.getElementById('salesPrice');
+                        const salesPriceWeekly = document.getElementById('salesPriceWeekly');
+                        const salesPriceMonth = document.getElementById('salesPriceMonth');
+                        
+                        const saleWeeklyTotalPrice = document.getElementById('saleWeeklyTotalPrice');
+                        const saleTotalPrice = document.getElementById('saleTotalPrice');
+                        const salesPriceTotalMonthly = document.getElementById('salesPriceTotalMonthly');
+                        //매장별로 이부분 수정 필요 전국 매장이였음
+                        if (clickedButtonText === "전국 매장") {
+                            salesPrice.style.display = 'none';
+                            salesPriceWeekly.style.display = 'none';
+                            salesPriceMonth.style.display = 'none';
+                            saleWeeklyTotalPrice.style.display = 'block';
+                            saleTotalPrice.style.display = 'block';
+                            salesPriceTotalMonthly.style.display = 'block';
+                        }
+
+                       else {
+                            salesPrice.style.display = 'block';
+                            salesPriceWeekly.style.display = 'block';
+                            salesPriceMonth.style.display = 'block';
+                            saleWeeklyTotalPrice.style.display = 'none';
+                            saleTotalPrice.style.display = 'none';
+                            salesPriceTotalMonthly.style.display = 'none';
+                        }
+        
+                        function handleDiv(divContainer) {
+                            let isFound = false;
+                            const divs = divContainer.querySelectorAll('div');
+                            divs.forEach(function(div) {
+                                if (div.getAttribute('value') === clickedButtonText) {
+                                    div.style.display = 'block';
+                                    isFound = true;
+                                } else {
+                                    div.style.display = 'none';
+                                }
+                            });
+        
+                            if (!isFound) {
+                                const newDiv = document.createElement('div');
+                                newDiv.setAttribute('value', clickedButtonText);
+                                newDiv.textContent = '0원';
+                                divContainer.appendChild(newDiv);
+                            }
+                        }
+        
+                        handleDiv(salesPrice);
+                        handleDiv(salesPriceWeekly);
+                        handleDiv(salesPriceMonth);
+                    });
+                });
+            
+                  
+            });
+        </script>
+
+        <script>
+            //매장별 매춘분석
+            async function fetchDataFromServer() {
+                try {
+                    const response = await fetch('/fetchData');
+                    if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                    }
+                    const data = await response.json();
+                    return data;
+                } catch (error) {
+                    console.error("데이터 가져오는 중 문제 발생:", error.message);
+                }
+            }
+
+            //c
+            function getWeekOfMonth(date) {
+                const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+                return Math.ceil((date.getDate() + firstDayOfMonth.getDay()) / 7);
+            }
+
+            function getStartAndEndDatesOfWeek(date) {
+                const weekOfMonth = getWeekOfMonth(date);
+                const startDate = new Date(date.getFullYear(), date.getMonth(), (weekOfMonth - 1) * 7 - (new Date(date.getFullYear(), date.getMonth(), 1).getDay() - 1) + 1);
+                let endDate = new Date(startDate);
+                endDate.setDate(startDate.getDate() + 6);
+
+                return { startDate, endDate };
+            }
+                        
+            fetchDataFromServer().then(data => {
+                const { startDate, endDate } = getStartAndEndDatesOfWeek(new Date());
+                const salesPriceElement = document.getElementById('salesPrice');
+                const salesPriceWeeklyElement = document.getElementById('salesPriceWeekly');
+                const salesPriceMonthElement = document.getElementById('salesPriceMonth');
+
+                //전국 매장 
+                const saleTotalPrice = document.getElementById('saleTotalPrice');
+                const saleWeeklyTotalPrice = document.getElementById('saleWeeklyTotalPrice');
+                const salesPriceMonthly = document.getElementById('salesPriceTotalMonthly');
+
+                const date = new Date();
+                const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+                const todayFormatted = date.toLocaleDateString('ko-KR', options).replace(/-/g, '.').slice(0, -1);
+
+                let summarizedDataToday = {};
+                let summarizedDataWeekly = {};
+                let summarizedDataMonthly = {};
+
+                let totalSaleForToday = 0;
+                let totalSaleForWeek = 0;
+                let totalSaleForMonth = 0;
+
+                for (let i = 0; i < data.length; i++) {
+                    if (!data[i].날짜) {
+                        continue;
+                    }
+                    let dateParts = data[i].날짜.split('.').map(part => parseInt(part, 10));
+                    let dataDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+
+                    let currentMonth = new Date().getMonth();
+                    let dataMonth = dataDate.getMonth();
+
+                    if (currentMonth === dataMonth) {
+                        summarizedDataMonthly[data[i].판매처] = summarizedDataMonthly[data[i].판매처] || 0;
+                        summarizedDataMonthly[data[i].판매처] += Number(data[i].총합계.replace(/,/g, ''));
+                        totalSaleForMonth += Number(data[i].총합계.replace(/,/g, ''));
+                    }
+
+                    if (data[i].날짜 === todayFormatted) {
+                        summarizedDataToday[data[i].판매처] = summarizedDataToday[data[i].판매처] || 0;
+                        summarizedDataToday[data[i].판매처] += Number(data[i].총합계.replace(/,/g, ''));
+                        totalSaleForToday += Number(data[i].총합계.replace(/,/g, ''));
+                    }
+
+                    if (dataDate >= startDate && dataDate <= endDate) {
+                        summarizedDataWeekly[data[i].판매처] = summarizedDataWeekly[data[i].판매처] || 0;
+                        summarizedDataWeekly[data[i].판매처] += Number(data[i].총합계.replace(/,/g, ''));
+                        totalSaleForWeek += Number(data[i].총합계.replace(/,/g, ''));
+                    }
+                }
+                let salesPriceTextToday = "";
+                let salesPriceTextWeekly = "";
+                let salesPriceTextMonthly = ""
+                
+                for (let store in summarizedDataToday) {
+                    salesPriceTextToday += `<div value="${store}"><span>${store}:</span> ${summarizedDataToday[store].toLocaleString()}원</div>`;
+                }
+
+                for (let store in summarizedDataWeekly) {
+                    salesPriceTextWeekly += `<div value="${store}"><span>${store}:</span> ${summarizedDataWeekly[store].toLocaleString()}원</div>`;
+                }
+                for (let store in summarizedDataMonthly) {
+                    salesPriceTextMonthly += `<div value="${store}"><span>${store}:</span> ${summarizedDataMonthly[store].toLocaleString()}원</div>`;
+                }
+
+                salesPriceElement.innerHTML = salesPriceTextToday; 
+                salesPriceWeeklyElement.innerHTML = salesPriceTextWeekly;
+                salesPriceMonthElement.innerHTML = salesPriceTextMonthly;
+
+                saleTotalPrice.innerText = `${totalSaleForToday.toLocaleString()}원`;
+                saleWeeklyTotalPrice.innerText =`${totalSaleForWeek.toLocaleString()}원`
+                salesPriceMonthly.innerText = `${totalSaleForMonth.toLocaleString()}원`;
+                
+            });
+
+        </script>
+
+
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script>
+                    //판매리스트
+                    async function fetchDataAndDrawCharts() {
+                            try {
+                                const response = await fetch('/getData');
+                                const data = await response.json();
+                                const last15Days = getLast15Days();
+
+                                // 판매처 별로 데이터 그룹화
+                                const groupedData = data.reduce((acc, post) => {
+                                    acc[post.판매처] = acc[post.판매처] || [];
+                                    acc[post.판매처].push(post);
+                                    return acc;
+                                }, {});
+
+                                // 전체 매장 데이터 집계
+                                const allStoresData = last15Days.map(day => {
+                                    return data.filter(post => post.날짜 === day)
+                                            .reduce((sum, post) => sum + Number(post.총합계.replace(/,/g, '')), 0);
+                                });
+
+                                // 전체 매장 차트 그리기
+                                const allStoresDiv = document.getElementById('전국 매장');
+                                if (allStoresDiv) {
+                                    const allStoresCanvas = document.createElement('canvas');
+                                    allStoresDiv.appendChild(allStoresCanvas);
+                                    new Chart(allStoresCanvas, {
+                                        type: 'bar',
+                                        data: {
+                                            labels: last15Days,
+                                            datasets: [{
+                                                label: '전국 매장',
+                                                data: allStoresData,
+                                                backgroundColor: '#0dcaf06e',
+                                                borderColor: '#0dcaf06e',
+                                                borderWidth: 1
+                                            }]
+                                        },
+                                        options: {
+                                            scales: {
+                                                y: {
+                                                    ticks: {
+                                                        stepSize: 50000,
+                                                        beginAtZero: true,
+                                                        callback: function(value, index, values) {
+                                                            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                        }
+                                                    },
+                                                    min: 0,
+                                                    max: 30000000,
+                                                    duration: 0
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
+                                // [기존 코드 유지] 각 판매처별 차트 그리기
+                                const storeNames = Object.keys(groupedData);
+                                storeNames.forEach(store => {
+                                    const storeDiv = document.getElementById(store);
+                                    if (!storeDiv) return; // 해당하는 div가 없으면 넘어간다.
+
+                                    const chartData = last15Days.map(day => {
+                                        const dailySales = groupedData[store].filter(post => post.날짜 === day);
+                                        return dailySales.reduce((sum, post) => sum + Number(post.총합계.replace(/,/g, '')), 0);
+                                    });
+
+                                    // 캔버스 생성 및 div에 추가
+                                    const canvas = document.createElement('canvas');
+                                    storeDiv.appendChild(canvas);
+
+                                    // 차트 그리기
+                                    new Chart(canvas, {
+                                        type: 'bar',
+                                        data: {
+                                            labels: last15Days,
+                                            datasets: [{
+                                                label: store,
+                                                data: chartData,
+                                                backgroundColor: '#0dcaf06e',
+                                                borderColor: '#0dcaf06e',
+                                                borderWidth: 1
+                                            }]
+                                        },
+                                        options: {
+                                            scales: {
+                                                y: {
+                                                    ticks: {
+                                                        stepSize: 100000,
+                                                        beginAtZero: true,
+                                                        callback: function(value, index, values) {
+                                                            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                        }
+                                                    },
+                                                    min: 0,
+                                                    max: 5000000,
+                                                    duration: 0
+                                                }
+                                            }
+                                        }
+                                    });
+                                });
+
+                            } catch (error) {
+                                console.error('Error:', error);
+                            }
+                        }
+
+                        function getLast15Days() {
+                            const days = [];
+                            const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+
+                            for (let i = 14; i >= 0; i--) {
+                                const d = new Date();
+                                d.setDate(d.getDate() - i);
+                                days.push(d.toLocaleDateString('ko-KR', options).replace(/-/g, '.').slice(0, -1));
+                            }
+                            return days;
+                        }
+
+                        // 함수 호출
+                        fetchDataAndDrawCharts();
+                </script>
+
+                <script>
+                    //차트
+                    document.addEventListener("DOMContentLoaded", () => {
+                        const productData = [];
+                        for (let i = 1; i <= 5; i++) {
+                            const productName = document.querySelector(`.nds_0${i} .product-name`).innerText;
+                            const productCount = parseInt(document.querySelector(`.nds_0${i} .product-count`).innerText, 10);
+
+                            productData.push({
+                                name: productName,
+                                value: productCount
+                            });
+                        }
+                        echarts.init(document.querySelector("#trafficChart")).setOption({
+                            tooltip: {
+                                trigger: 'item'
+                            },
+                            legend: {
+                                top: '5%',
+                                left: 'center'
+                            },
+                            series: [{
+                                name: '판매수량',
+                                type: 'pie',
+                                radius: ['40%', '70%'],
+                                avoidLabelOverlap: false,
+                                label: {
+                                    show: false,
+                                    position: 'center'
+                                },
+                                emphasis: {
+                                    label: {
+                                        show: true,
+                                        fontSize: '18',
+                                        fontWeight: 'bold'
+                                    }
+                                },
+                                labelLine: {
+                                    show: false
+                                },
+                                data: productData
+                            }]
+                        });
+                    });
+
+                </script>
+                
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+                <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>               
+                <script>
+                    $(document).ready(function() {
+                        const today = new Date();
+                        const month = today.getMonth() + 1;
+                        $('.month-store-text').text(`전국 매장 ${month}월 판매 리스트`);
+                        $('.month-store-text2').text(`전국 매장 ${month}월 베스트5`);
+
+                        // 이번 달의 첫 날 및 마지막 날
+                        const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+                        const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+                
+                        // 2. 데이터 필터링 
+                        $('#example tbody tr').each(function() {
+                            const dateData = $(this).find('td:first-child').text(); 
+                            const dateObj = new Date(dateData);
+                
+                            if (dateObj < firstDayOfMonth || dateObj > lastDayOfMonth) {
+                                $(this).remove();
+                            }
+                        });
+                        
+                        $('#example').DataTable({
+                            order: [[0, 'desc']],
+                            columnDefs: [{
+                                targets: 0,
+                                orderable: false
+                            }],
+                            language: {
+                                "sEmptyTable":     "테이블에 데이터가 없습니다",
+                                "sInfo":           "",
+                                "sInfoEmpty":      "0건",
+                                "sInfoFiltered":   "(전체 _MAX_ 건 중 검색결과)",
+                                "sInfoPostFix":    "",
+                                "sInfoThousands":  ",",
+                                "sLengthMenu":     "_MENU_",
+                                "sLoadingRecords": "로딩중...",
+                                "sProcessing":     "처리중...",
+                                "sSearch":         "검색:",
+                                "sZeroRecords":    "검색 결과가 없습니다",
+                                "oPaginate": {
+                                    "sFirst":    "처음",
+                                    "sLast":     "마지막",
+                                    "sNext":     "다음",
+                                    "sPrevious": "이전"
+                                }
+                            }
+                        });
+                        $('.dataTables_filter input').attr('placeholder', '검색어 입력 해주세요');
+                    });
+                </script>
+                
+       
+
+
+ 
+
+
+<%- include('footer.html') %>
