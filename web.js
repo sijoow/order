@@ -36,7 +36,7 @@ app.listen('8001', function(){
 
 
 var db;
-MongoClient.connect('mongodb+srv://yogibo:yogibo@cluster0.vvkyawf.mongodb.net/?retryWrites=true&w=majority', function(에러, client){
+MongoClient.connect('mongodb+srv://yogibo:몽고디비연결', function(에러, client){
   if (에러) return console.log(에러);
   db = client.db('todoapp');
 })
@@ -570,7 +570,7 @@ app.post('/sendMail', async (req, res) => {
       port: 465,       
       auth: {
           user:'yogibo@naver.com', 
-          pass:'hugibo2023@@',        
+          pass:'비밀번호',        
       }
   });
   const mailOptions = {
